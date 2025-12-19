@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 3rd month, love</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @font-face {
+            font-family: 'Beachday';
+            src: url('beachday.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="cute-header">
+            <h2 class="love-title">have your seat, get comfy</h2>
+            <p class="cast-text"> -> doiodoi and hitesh</p>
+        </header>
+
+        <div class="swipe-hint">
+            <div class="arrow-left">‹</div>
+            <span class="swipe-text">Swipe swipe</span>
+            <div class="arrow-right">›</div>
+        </div>
+        
+        <div class="swiper-container">
+            <div class="card-wrapper">
+                <!-- Card 1: Opening -->
+                <div class="card active" style="opacity: 1; transform: translateX(0) rotateY(0deg) scale(1); z-index: 10;">
+                    <div class="card-content">
+                        <p class="card-text">ready miss?</p>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="Celebration">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Gratitude -->
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-text">thank you for being you, the way you are, the way your treat people and the way you treat me, and ...</p>
+                        <div class="gif-decoration">
+                            <img src="jiji-cat.gif" class="cute-gif" alt="Gratitude">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Letter Purpose -->
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-text">this is just a little gallery, you could say,the way I see you, and …</p>
+                        <div class="gif-decoration">
+                            <img src="susuwatari-studio-ghibli.gif" class="cute-gif" alt="Love letter">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Appreciation -->
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-text">thank you so much for teaching me what love actually is, you good at it miss, very good, and ...</p>
+                        <div class="gif-decoration">
+                            <img src="21d14b1b1d143a2a26d20870d6eea7e8.gif" class="cute-gif" alt="Love appreciation">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Role Description -->
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-text">Thank you so much for being such a good friend, a partner, and the best girlfriend, the best I could have ever asked for.”</p>
+                        <div class="gif-decoration">
+                            <img src="waal-boyss-otw.gif" class="cute-gif" alt="Best girlfriend">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 9: Image 1 -->
+                <div class="card">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="1.PNG" alt="Our beautiful memory" class="card-image">
+                        </div>
+                        <div class="gif-decoration">
+                            <img src="4ae7589d934777eb4d2462020cc0c414.gif" class="cute-gif" alt="Memory celebration">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 10: Image 2 -->
+                <div class="card">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="2.JPG" alt="togetha" class="card-image">
+                        </div>
+                        <div class="gif-decoration">
+                            <img src="d09893d17b977a53177a5e90d3fdd7f200626338r1-500-246_hq.gif" class="cute-gif" alt="Sweet moments">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 8: Final Declaration -->
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-text">this is my pov of how I see you, just how prettty of a girlfriend you are</p>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="I love you">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 11: Video -->
+                <div class="card">
+                    <div class="card-content">
+                        <div class="video-container">
+                            <video controls preload="metadata" class="card-video">
+                                <source src="video2.MP4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 12: Final Game Page -->
+                <div class="card">
+                    <div class="card-content">
+                        <h2 class="final-title">I love you</h2>
+                        <button class="play-game-btn" onclick="openGame()">Play Now</button>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="Love">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation">
+                <button class="nav-btn prev-btn" onclick="previousCard()">
+                    <span class="nav-icon">‹</span>
+                </button>
+                <div class="dots-container">
+                    <span class="dot active" onclick="currentCard(1)"></span>
+                    <span class="dot" onclick="currentCard(2)"></span>
+                    <span class="dot" onclick="currentCard(3)"></span>
+                    <span class="dot" onclick="currentCard(4)"></span>
+                    <span class="dot" onclick="currentCard(5)"></span>
+                    <span class="dot" onclick="currentCard(7)"></span>
+                    <span class="dot" onclick="currentCard(9)"></span>
+                    <span class="dot" onclick="currentCard(10)"></span>
+                    <span class="dot" onclick="currentCard(11)"></span>
+                    <span class="dot" onclick="currentCard(12)"></span>
+                </div>
+                <button class="nav-btn next-btn" onclick="nextCard()">
+                    <span class="nav-icon">›</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating GIF decorations -->
+    <div class="floating-gifs">
+        <img src="totoro.gif" class="floating-gif gif1" alt="">
+        <img src="jiji-cat.gif" class="floating-gif gif2" alt="">
+        <img src="susuwatari-studio-ghibli.gif" class="floating-gif gif3" alt="">
+        <img src="21d14b1b1d143a2a26d20870d6eea7e8.gif" class="floating-gif gif4" alt="">
+        <img src="4ae7589d934777eb4d2462020cc0c414.gif" class="floating-gif gif5" alt="">
+        <img src="d09893d17b977a53177a5e90d3fdd7f200626338r1-500-246_hq.gif" class="floating-gif gif6" alt="">
+        <img src="waal-boyss-otw.gif" class="floating-gif gif7" alt="">
+    </div>
+
+    <!-- Game Modal -->
+    <div id="gameModal" class="game-modal">
+        <div class="game-container">
+            <div class="game-header">
+                <h3>lesgo geng</h3>
+                <button class="close-game" onclick="closeGame()">×</button>
+            </div>
+            <canvas id="gameCanvas" width="400" height="600"></canvas>
+            <div class="game-ui">
+                <div class="experience">Experience: <span id="expCount">0</span></div>
+                <div class="game-message" id="gameMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
