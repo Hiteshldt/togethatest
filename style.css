@@ -6,12 +6,12 @@
 
 body {
     font-family: 'Beachday', 'Comfortaa', cursive;
-    background: linear-gradient(135deg, #f2ead8 0%, #ede1d0 30%, #e8dcc8 70%, #e3d7c0 100%),
-                radial-gradient(circle at 20% 80%, rgba(247, 230, 230, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(252, 240, 240, 0.15) 0%, transparent 50%);
+    background: linear-gradient(135deg, #f5ebe0 0%, #ede0d4 30%, #e6ccb2 70%, #ddb892 100%),
+                radial-gradient(circle at 20% 80%, rgba(237, 224, 212, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(230, 204, 178, 0.3) 0%, transparent 50%);
     min-height: 100vh;
     overflow-x: hidden;
-    color: #8b7355;
+    color: #7f5539;
     position: relative;
 }
 
@@ -22,8 +22,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4c5b5' fill-opacity='0.04' fill-rule='evenodd'%3E%3Ccircle cx='30' cy='30' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: -1;
 }
@@ -48,8 +48,12 @@ body::before {
     font-family: 'Beachday', 'Nunito', sans-serif;
     font-size: 3rem;
     font-weight: 800;
-    color: #9f815c;
-    text-shadow: 2px 2px 6px rgba(139, 115, 85, 0.3);
+    color: #9c6644;
+    /* Anime-style text with outline */
+    text-shadow:
+        3px 3px 0px rgba(127, 85, 57, 0.4),
+        -1px -1px 0px rgba(255, 255, 255, 0.9),
+        2px 2px 8px rgba(156, 102, 68, 0.5);
     margin-bottom: 20px;
     position: relative;
     letter-spacing: 1px;
@@ -59,12 +63,12 @@ body::before {
 .cast-text {
     font-family: 'Beachday', 'Quicksand', sans-serif;
     font-size: 1rem;
-    color: #a08570;
+    color: #9c7a5f;
     text-align: center;
     margin-top: 10px;
     font-style: italic;
     letter-spacing: 0.5px;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 /* Swipe Hint */
@@ -80,13 +84,13 @@ body::before {
 .swipe-text {
     font-family: 'Beachday', sans-serif;
     font-size: 0.9rem;
-    color: #a08570;
-    opacity: 0.7;
+    color: #9c7a5f;
+    opacity: 0.85;
 }
 
 .arrow-left, .arrow-right {
     font-size: 1.5rem;
-    color: #c19a6b;
+    color: #b08968;
     animation: glowPulse 2s ease-in-out infinite;
 }
 
@@ -100,12 +104,12 @@ body::before {
 
 @keyframes glowPulse {
     0%, 100% {
-        opacity: 0.5;
-        text-shadow: 0 0 5px rgba(193, 154, 107, 0.3);
+        opacity: 0.6;
+        text-shadow: 0 0 5px rgba(176, 137, 104, 0.4);
     }
     50% {
         opacity: 1;
-        text-shadow: 0 0 15px rgba(193, 154, 107, 0.6);
+        text-shadow: 0 0 15px rgba(176, 137, 104, 0.7);
     }
 }
 
@@ -131,17 +135,31 @@ body::before {
     height: 100%;
 }
 
-/* Card Styles - Ghibli Paper Pages */
+/* Card Styles - Anime/Manga Paper Pages */
 .card {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #f0e6d3 0%, #ebe1ce 50%, #e6dcc9 100%),
-                radial-gradient(circle at 70% 30%, rgba(248, 235, 235, 0.3) 0%, transparent 60%);
+    visibility: hidden;
+    background:
+        /* Paper fiber texture */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise' /%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60' /%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.12'/%3E%3C/svg%3E"),
+        /* Halftone manga screen tone */
+        radial-gradient(circle at 20% 30%, rgba(176, 137, 104, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at 80% 70%, rgba(176, 137, 104, 0.06) 1px, transparent 1px),
+        /* Base gradient */
+        linear-gradient(135deg, #faf5f0 0%, #f5ebe0 50%, #ede0d4 100%),
+        radial-gradient(circle at 70% 30%, rgba(237, 224, 212, 0.4) 0%, transparent 60%);
+    background-size: 100% 100%, 8px 8px, 8px 8px, 100% 100%, 100% 100%;
+    background-position: 0 0, 0 0, 4px 4px, 0 0, 0 0;
     border-radius: 25px;
-    box-shadow: 
-        0 15px 40px rgba(180, 150, 120, 0.15),
-        0 5px 20px rgba(200, 170, 140, 0.1);
+    box-shadow:
+        /* Anime cel-shading style shadow */
+        0 12px 35px rgba(127, 85, 57, 0.2),
+        0 4px 15px rgba(156, 102, 68, 0.15),
+        /* Inner shadow for depth */
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -2px 3px rgba(156, 102, 68, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -149,16 +167,36 @@ body::before {
     opacity: 0;
     transform: translateX(100%) rotateY(45deg) scale(0.8);
     transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
-    border: 2px solid rgba(220, 190, 160, 0.5);
+    /* Manga-style bold border */
+    border: 3px solid #b08968;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Manga speed lines effect on card edges */
+.card::after {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(139, 115, 85, 0.03) 50%, transparent 100%),
+        linear-gradient(0deg, transparent 0%, rgba(139, 115, 85, 0.03) 50%, transparent 100%);
+    pointer-events: none;
+    border-radius: 22px;
+    opacity: 0.5;
 }
 
 .card.active {
     opacity: 1;
+    visibility: visible;
     transform: translateX(0) rotateY(0deg) scale(1);
     z-index: 10;
+    pointer-events: auto;
 }
 
 .card.prev {
@@ -182,15 +220,21 @@ body::before {
     justify-content: center;
     align-items: center;
     gap: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .card-title {
     font-family: 'Beachday', 'Nunito', sans-serif;
     font-size: 2.5rem;
     font-weight: 700;
-    color: #c19a6b;
+    color: #9c6644;
     margin-bottom: 25px;
-    text-shadow: 1px 1px 3px rgba(225, 190, 180, 0.3);
+    /* Anime-style bold text shadow */
+    text-shadow:
+        2px 2px 0px rgba(127, 85, 57, 0.3),
+        -1px -1px 0px rgba(255, 255, 255, 1),
+        3px 3px 8px rgba(156, 102, 68, 0.5);
     position: relative;
     letter-spacing: 0.5px;
 }
@@ -199,13 +243,14 @@ body::before {
     font-family: 'Beachday', 'Quicksand', sans-serif;
     font-size: 1.6rem;
     line-height: 2.1;
-    color: #8b7355;
+    color: #6b4423;
     text-align: center;
-    font-weight: 500;
+    font-weight: 600;
     max-width: 500px;
     letter-spacing: 0.5px;
     margin: 25px auto;
     padding: 25px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .cute-decoration {
@@ -238,9 +283,16 @@ body::before {
     height: 250px;
     object-fit: cover;
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
-    border: 3px solid rgba(255, 255, 255, 0.9);
-    transition: transform 0.3s ease;
+    /* Anime-style bold shadow and border */
+    box-shadow:
+        0 10px 25px rgba(127, 85, 57, 0.3),
+        0 4px 0px rgba(156, 102, 68, 0.25),
+        inset 0 -2px 0px rgba(0, 0, 0, 0.08);
+    border: 4px solid #b08968;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    /* Subtle anime color adjustment */
+    filter: contrast(1.1) saturate(1.2) brightness(1.05);
+    position: relative;
 }
 
 .card-image:hover {
@@ -252,9 +304,14 @@ body::before {
     max-width: 300px;
     height: auto;
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
-    border: 3px solid rgba(255, 255, 255, 0.9);
-    background: linear-gradient(45deg, #fff0f5, #ffe4e6);
+    /* Anime-style shadow */
+    box-shadow:
+        0 10px 25px rgba(127, 85, 57, 0.3),
+        0 4px 0px rgba(156, 102, 68, 0.25);
+    border: 4px solid #b08968;
+    background: linear-gradient(45deg, #faf5f0, #f5ebe0);
+    /* Subtle anime color grading */
+    filter: contrast(1.1) saturate(1.2) brightness(1.05);
 }
 
 .card-video:focus {
@@ -271,16 +328,22 @@ body::before {
     display: flex;
     align-items: center;
     gap: 20px;
-    background: linear-gradient(145deg, rgba(245, 235, 225, 0.9), rgba(240, 220, 210, 0.8));
+    background:
+        /* Paper texture on navigation */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='navPaper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23navPaper)' opacity='0.08'/%3E%3C/svg%3E"),
+        linear-gradient(145deg, rgba(250, 245, 240, 0.98), rgba(245, 235, 225, 0.95));
     padding: 15px 25px;
     border-radius: 30px;
-    box-shadow: 0 10px 30px rgba(200, 170, 150, 0.15);
+    /* Anime-style bold shadow */
+    box-shadow:
+        0 10px 30px rgba(127, 85, 57, 0.25),
+        0 4px 0px rgba(156, 102, 68, 0.2);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(225, 200, 180, 0.4);
+    border: 3px solid #b08968;
 }
 
 .nav-btn {
-    background: linear-gradient(145deg, #f5d7d7, #f0e6d6);
+    background: linear-gradient(145deg, #e6ccb2, #ddb892);
     border: none;
     border-radius: 50%;
     width: 50px;
@@ -290,9 +353,10 @@ body::before {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(200, 170, 150, 0.2);
-    border: 2px solid rgba(245, 235, 225, 0.7);
-    color: #8b7355;
+    box-shadow: 0 5px 15px rgba(127, 85, 57, 0.25);
+    border: 2px solid #b08968;
+    color: #6b4423;
+    font-weight: 600;
 }
 
 .nav-btn:hover {
@@ -339,127 +403,182 @@ body::before {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 10px;
     }
-    
+
     .love-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
+        line-height: 1.3;
     }
-    
+
     .cast-text {
         font-size: 0.9rem;
     }
-    
+
     .swiper-container {
-        height: 500px;
+        height: 520px;
         max-width: 100%;
+        padding: 0 5px;
     }
-    
+
     .card {
-        padding: 20px;
+        padding: 25px 20px;
+        border-radius: 20px;
     }
-    
+
     .card-title {
-        font-size: 2.2rem;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        line-height: 1.2;
     }
-    
+
     .card-text {
-        font-size: 1.4rem;
+        font-size: 1.35rem;
+        line-height: 1.9;
+        padding: 15px;
+        margin: 15px auto;
     }
-    
+
     .card-image {
-        width: 200px;
-        height: 200px;
+        width: 220px;
+        height: 220px;
     }
-    
+
     .card-video {
-        max-width: 250px;
+        max-width: 260px;
     }
-    
+
     .navigation {
-        bottom: -70px;
-        padding: 12px 20px;
-        gap: 15px;
+        bottom: -75px;
+        padding: 12px 18px;
+        gap: 12px;
     }
-    
+
     .nav-btn {
-        width: 45px;
-        height: 45px;
+        width: 48px;
+        height: 48px;
     }
-    
+
     .nav-icon {
-        font-size: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
     }
 }
 
 @media (max-width: 480px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        padding: 8px;
+    }
+
     .love-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        line-height: 1.2;
+        margin-bottom: 15px;
     }
-    
+
     .cast-text {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
-    
+
     .swiper-container {
-        height: 450px;
+        height: 500px;
+        max-width: 100%;
     }
-    
+
     .card {
-        padding: 15px;
+        padding: 20px 15px;
+        border-radius: 18px;
     }
-    
+
     .card-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        line-height: 1.3;
     }
-    
+
     .card-text {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         line-height: 1.8;
+        padding: 12px;
+        margin: 12px auto;
     }
-    
+
     .card-image {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
     }
-    
+
     .card-video {
-        max-width: 200px;
+        max-width: 220px;
     }
-    
+
+    .navigation {
+        bottom: -70px;
+        padding: 10px 15px;
+        gap: 10px;
+    }
+
+    .nav-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .nav-icon {
+        font-size: 1rem;
+    }
+
+    .dot {
+        width: 9px;
+        height: 9px;
+    }
+
     .floating-gif {
         width: 45px;
         height: 45px;
     }
-    
+
     .game-container {
-        padding: 10px;
-        max-width: 95vw;
-        max-height: 95vh;
+        padding: 12px;
+        max-width: 96vw;
+        max-height: 92vh;
     }
-    
+
     #gameCanvas {
         width: 100%;
-        max-width: 380px;
+        max-width: 100%;
         height: auto;
-        max-height: 70vh;
+        max-height: 65vh;
     }
-    
+
     .game-header h3 {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
     }
-    
+
     .experience {
         font-size: 1rem;
     }
-    
+
     .final-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        line-height: 1.3;
     }
-    
+
     .play-game-btn {
-        padding: 12px 30px;
-        font-size: 1.1rem;
+        padding: 14px 32px;
+        font-size: 1.15rem;
+    }
+
+    .cute-gif {
+        width: 85px;
+        height: 85px;
     }
 }
 
@@ -467,24 +586,29 @@ body::before {
 .final-title {
     font-family: 'Beachday', sans-serif;
     font-size: 3rem;
-    color: #c19a6b;
+    color: #9c6644;
     text-align: center;
     margin-bottom: 30px;
-    text-shadow: 2px 2px 6px rgba(225, 190, 180, 0.4);
+    /* Anime-style dramatic text shadow */
+    text-shadow:
+        3px 3px 0px rgba(127, 85, 57, 0.4),
+        -1px -1px 0px rgba(255, 255, 255, 1),
+        4px 4px 12px rgba(156, 102, 68, 0.5);
 }
 
 .play-game-btn {
-    background: linear-gradient(145deg, #f5d7d7, #f0e6d6);
+    background: linear-gradient(145deg, #e6ccb2, #ddb892);
     border: none;
     border-radius: 25px;
     padding: 15px 40px;
     font-family: 'Beachday', sans-serif;
     font-size: 1.2rem;
-    color: #8b7355;
+    color: #6b4423;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(200, 170, 150, 0.2);
-    border: 2px solid rgba(245, 235, 225, 0.7);
+    box-shadow: 0 8px 20px rgba(127, 85, 57, 0.3);
+    border: 3px solid #b08968;
 }
 
 .play-game-btn:hover {
@@ -514,14 +638,21 @@ body::before {
 }
 
 .game-container {
-    background: linear-gradient(135deg, #f8f5f0, #f0e8e3);
+    background:
+        /* Paper texture */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='gamePaper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gamePaper)' opacity='0.08'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, #faf5f0, #f5ebe0);
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    /* Anime-style dramatic shadow */
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 8px 0px rgba(127, 85, 57, 0.3);
     position: relative;
     margin: auto;
     max-width: 450px;
     width: 90vw;
+    border: 4px solid #b08968;
 }
 
 .game-header {
@@ -533,9 +664,10 @@ body::before {
 
 .game-header h3 {
     font-family: 'Beachday', sans-serif;
-    color: #8b7355;
+    color: #9c6644;
     font-size: 1.5rem;
     margin: 0;
+    font-weight: 700;
 }
 
 .close-game {
@@ -557,7 +689,7 @@ body::before {
 }
 
 #gameCanvas {
-    border: 3px solid rgba(225, 200, 180, 0.5);
+    border: 4px solid #b08968;
     border-radius: 15px;
     background: linear-gradient(180deg, #e6f3ff, #f0f8ff);
     display: block;
@@ -568,6 +700,10 @@ body::before {
     max-width: 400px;
     height: 600px;
     margin: 0 auto;
+    /* Anime-style inset shadow */
+    box-shadow:
+        inset 0 2px 8px rgba(127, 85, 57, 0.15),
+        0 4px 0px rgba(156, 102, 68, 0.2);
 }
 
 .game-ui {
@@ -577,14 +713,15 @@ body::before {
 
 .experience {
     font-family: 'Beachday', sans-serif;
-    color: #8b7355;
+    color: #7f5539;
     font-size: 1.1rem;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
 .game-message {
     font-family: 'Beachday', sans-serif;
-    color: #c19a6b;
+    color: #9c6644;
     font-size: 0.9rem;
     min-height: 40px;
     animation: messageGlow 0.5s ease-in-out;
@@ -593,6 +730,7 @@ body::before {
     max-width: 350px;
     margin: 0 auto;
     word-wrap: break-word;
+    font-weight: 600;
 }
 
 @keyframes messageGlow {
@@ -607,9 +745,14 @@ body::before {
     border-radius: 20px;
     object-fit: cover;
     margin: 10px;
-    box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.8);
+    /* Anime-style bold shadow */
+    box-shadow:
+        0 8px 20px rgba(127, 85, 57, 0.3),
+        0 3px 0px rgba(156, 102, 68, 0.25);
+    border: 3px solid #b08968;
     transition: transform 0.3s ease;
+    /* Anime color enhancement */
+    filter: contrast(1.15) saturate(1.25) brightness(1.05);
 }
 
 .cute-gif:hover {
@@ -738,5 +881,175 @@ html {
     100% {
         opacity: 0;
         transform: translateX(-100%) rotateY(-45deg) scale(0.8);
+    }
+}
+/* PIN Lock Screen */
+.lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5ebe0 0%, #ede0d4 30%, #e6ccb2 70%, #ddb892 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.lock-container {
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='lockPaper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' /%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60' /%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lockPaper)' opacity='0.12'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, #faf5f0 0%, #f5ebe0 50%, #ede0d4 100%);
+    padding: 50px 40px;
+    border-radius: 25px;
+    box-shadow:
+        0 15px 40px rgba(127, 85, 57, 0.25),
+        0 5px 15px rgba(156, 102, 68, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border: 3px solid #b08968;
+    text-align: center;
+    min-width: 320px;
+}
+
+.lock-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.lock-title {
+    font-family: 'Beachday', sans-serif;
+    font-size: 2rem;
+    color: #9c6644;
+    margin-bottom: 30px;
+    text-shadow:
+        2px 2px 0px rgba(127, 85, 57, 0.3),
+        -1px -1px 0px rgba(255, 255, 255, 1),
+        2px 2px 6px rgba(156, 102, 68, 0.4);
+}
+
+.pin-input-container {
+    margin-bottom: 25px;
+}
+
+.pin-input {
+    font-family: 'Beachday', monospace;
+    font-size: 1.8rem;
+    padding: 15px 20px;
+    border: 3px solid #b08968;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #6b4423;
+    text-align: center;
+    letter-spacing: 8px;
+    width: 200px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(127, 85, 57, 0.1);
+}
+
+.pin-input:focus {
+    border-color: #9c6644;
+    box-shadow:
+        inset 0 2px 5px rgba(127, 85, 57, 0.1),
+        0 0 0 3px rgba(156, 102, 68, 0.2);
+}
+
+.unlock-btn {
+    font-family: 'Beachday', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 15px 40px;
+    background: linear-gradient(145deg, #e6ccb2, #ddb892);
+    border: 3px solid #b08968;
+    border-radius: 25px;
+    color: #6b4423;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(127, 85, 57, 0.25);
+}
+
+.unlock-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(127, 85, 57, 0.3);
+}
+
+.unlock-btn:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    margin-top: 15px;
+    font-family: 'Beachday', sans-serif;
+    color: #c1440e;
+    font-size: 0.95rem;
+    min-height: 24px;
+    font-weight: 600;
+}
+
+/* Shake animation for wrong PIN */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.pin-input.shake {
+    animation: shake 0.5s ease-in-out;
+    border-color: #c1440e;
+}
+
+/* Page indicators for swipe gestures */
+.page-indicator {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    color: rgba(176, 137, 104, 0.2);
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.page-indicator.left {
+    left: 20px;
+}
+
+.page-indicator.right {
+    right: 20px;
+}
+
+.swiper-container:hover ~ .page-indicator {
+    opacity: 0.6;
+}
+
+.page-indicator.active {
+    opacity: 1;
+    animation: indicatorPulse 0.5s ease-in-out;
+}
+
+@keyframes indicatorPulse {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.2); }
+}
+
+@media (max-width: 768px) {
+    .page-indicator {
+        font-size: 2.5rem;
+    }
+    
+    .page-indicator.left {
+        left: 10px;
+    }
+    
+    .page-indicator.right {
+        right: 10px;
     }
 }

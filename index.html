@@ -15,7 +15,20 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- PIN Lock Screen -->
+    <div id="lockScreen" class="lock-screen">
+        <div class="lock-container">
+            <div class="lock-icon">🔒</div>
+            <h2 class="lock-title">Enter PIN</h2>
+            <div class="pin-input-container">
+                <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autofocus>
+            </div>
+            <button class="unlock-btn" onclick="checkPin()">Unlock</button>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display: none;">
         <header class="cute-header">
             <h2 class="love-title">have your seat, get comfy</h2>
             <p class="cast-text"> -> doiodoi and hitesh</p>
@@ -30,7 +43,7 @@
         <div class="swiper-container">
             <div class="card-wrapper">
                 <!-- Card 1: Opening -->
-                <div class="card active" style="opacity: 1; transform: translateX(0) rotateY(0deg) scale(1); z-index: 10;">
+                <div class="card">
                     <div class="card-content">
                         <p class="card-text">ready miss?</p>
                         <div class="gif-decoration">
@@ -161,6 +174,10 @@
         </div>
     </div>
 
+    <!-- Page navigation indicators -->
+    <div class="page-indicator left" id="prevIndicator">‹</div>
+    <div class="page-indicator right" id="nextIndicator">›</div>
+
     <!-- Floating GIF decorations -->
     <div class="floating-gifs">
         <img src="totoro.gif" class="floating-gif gif1" alt="">
@@ -185,6 +202,7 @@
                 <div class="game-message" id="gameMessage"></div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="script.js"></script>

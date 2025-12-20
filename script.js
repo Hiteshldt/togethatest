@@ -1,3 +1,43 @@
+// PIN Lock functionality
+function checkPin() {
+    const pinInput = document.getElementById('pinInput');
+    const errorMessage = document.getElementById('errorMessage');
+    const lockScreen = document.getElementById('lockScreen');
+    const mainContent = document.getElementById('mainContent');
+    const pin = pinInput.value;
+
+    if (pin === '2266') {
+        lockScreen.style.display = 'none';
+        mainContent.style.display = 'block';
+        // Initialize the swiper after unlocking
+        setTimeout(() => {
+            console.log('Initializing swiper...');
+            window.cardSwiper = new CuteCardSwiper();
+            console.log('Swiper initialized:', window.cardSwiper);
+        }, 200);
+    } else {
+        errorMessage.textContent = 'Incorrect PIN. Try again.';
+        pinInput.value = '';
+        pinInput.classList.add('shake');
+        setTimeout(() => {
+            pinInput.classList.remove('shake');
+            errorMessage.textContent = '';
+        }, 2000);
+    }
+}
+
+// Allow Enter key to submit PIN
+document.addEventListener('DOMContentLoaded', function() {
+    const pinInput = document.getElementById('pinInput');
+    if (pinInput) {
+        pinInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPin();
+            }
+        });
+    }
+});
+
 // Anniversary Card Swiper
 class CuteCardSwiper {
     constructor() {
@@ -12,10 +52,19 @@ class CuteCardSwiper {
     }
     
     init() {
+        console.log('Swiper init() called');
+        const cards = document.querySelectorAll('.card');
+        console.log(`Found ${cards.length} cards`);
+
         this.bindEvents();
         this.updateCardPositions();
         this.updateDots();
         this.preloadImages();
+
+        // Ensure first card is visible
+        setTimeout(() => {
+            this.updateCardPositions();
+        }, 50);
     }
     
     bindEvents() {
@@ -124,10 +173,12 @@ class CuteCardSwiper {
     }
     
     nextCard() {
+        console.log('nextCard() called, current:', this.currentCard, 'transitioning:', this.isTransitioning);
         if (this.isTransitioning) return;
-        
+
         this.hideSwipeHint();
-        
+        this.pulsePageIndicator('next');
+
         if (this.currentCard < this.totalCards) {
             this.goToCard(this.currentCard + 1);
         } else {
@@ -135,12 +186,14 @@ class CuteCardSwiper {
             this.goToCard(1);
         }
     }
-    
+
     previousCard() {
+        console.log('previousCard() called, current:', this.currentCard, 'transitioning:', this.isTransitioning);
         if (this.isTransitioning) return;
-        
+
         this.hideSwipeHint();
-        
+        this.pulsePageIndicator('prev');
+
         if (this.currentCard > 1) {
             this.goToCard(this.currentCard - 1);
         } else {
@@ -150,19 +203,25 @@ class CuteCardSwiper {
     }
     
     goToCard(cardNumber) {
-        if (this.isTransitioning || cardNumber === this.currentCard) return;
-        
+        console.log('goToCard() called with:', cardNumber, 'current:', this.currentCard, 'transitioning:', this.isTransitioning);
+        if (this.isTransitioning || cardNumber === this.currentCard) {
+            console.log('goToCard blocked - transitioning or same card');
+            return;
+        }
+
         this.hideSwipeHint();
         this.isTransitioning = true;
         this.currentCard = cardNumber;
-        
+        console.log('Moving to card:', cardNumber);
+
         this.updateCardPositions();
         this.updateDots();
         this.addCuteEffects();
-        
+
         // Reset transition lock after animation completes
         setTimeout(() => {
             this.isTransitioning = false;
+            console.log('Transition complete');
         }, 600);
     }
     
@@ -180,20 +239,39 @@ class CuteCardSwiper {
     updateCardPositions() {
         const cards = document.querySelectorAll('.card');
         console.log(`Updating card positions. Current card: ${this.currentCard}, Total cards found: ${cards.length}`);
-        
+
+        if (cards.length === 0) {
+            console.error('No cards found!');
+            return;
+        }
+
         cards.forEach((card, index) => {
             const cardNumber = index + 1;
             card.classList.remove('active', 'prev', 'next');
-            
+
             if (cardNumber === this.currentCard) {
                 card.classList.add('active');
-                console.log(`Card ${cardNumber} set as active`);
+                console.log(`Card ${cardNumber} set as active`, card);
+                // Force display for debugging
+                card.style.visibility = 'visible';
+                card.style.opacity = '1';
+                card.style.zIndex = '10';
             } else if (cardNumber < this.currentCard) {
                 card.classList.add('prev');
+                card.style.visibility = 'hidden';
             } else {
                 card.classList.add('next');
+                card.style.visibility = 'hidden';
             }
         });
+
+        // Log the active card content for debugging
+        const activeCard = document.querySelector('.card.active');
+        if (activeCard) {
+            console.log('Active card content:', activeCard.textContent.substring(0, 50));
+        } else {
+            console.error('No active card found after update!');
+        }
     }
     
     updateDots() {
@@ -206,10 +284,28 @@ class CuteCardSwiper {
     addCuteEffects() {
         // Add sparkle effect when changing cards
         this.createSparkles();
-        
+
         // Add gentle vibration on mobile (if supported)
         if ('vibrate' in navigator && window.innerWidth <= 768) {
             navigator.vibrate(50);
+        }
+    }
+
+    pulsePageIndicator(direction) {
+        // Pulse the appropriate page indicator
+        try {
+            const indicator = direction === 'next'
+                ? document.getElementById('nextIndicator')
+                : document.getElementById('prevIndicator');
+
+            if (indicator) {
+                indicator.classList.add('active');
+                setTimeout(() => {
+                    indicator.classList.remove('active');
+                }, 500);
+            }
+        } catch (error) {
+            console.log('Error pulsing indicator:', error);
         }
     }
     
@@ -252,20 +348,29 @@ class CuteCardSwiper {
 
 // Global functions for inline event handlers
 function nextCard() {
+    console.log('Global nextCard() called, swiper exists:', !!window.cardSwiper);
     if (window.cardSwiper) {
         window.cardSwiper.nextCard();
+    } else {
+        console.error('Swiper not initialized!');
     }
 }
 
 function previousCard() {
+    console.log('Global previousCard() called, swiper exists:', !!window.cardSwiper);
     if (window.cardSwiper) {
         window.cardSwiper.previousCard();
+    } else {
+        console.error('Swiper not initialized!');
     }
 }
 
 function currentCard(cardNumber) {
+    console.log('Global currentCard() called with:', cardNumber, 'swiper exists:', !!window.cardSwiper);
     if (window.cardSwiper) {
         window.cardSwiper.goToCard(cardNumber);
+    } else {
+        console.error('Swiper not initialized!');
     }
 }
 
@@ -320,10 +425,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(style);
-    
-    // Initialize the swiper
-    window.cardSwiper = new CuteCardSwiper();
-    
+
+    // Initialize the swiper - now done after PIN entry in checkPin()
+    // window.cardSwiper = new CuteCardSwiper();
+
     // Force first card to be visible as fallback
     setTimeout(() => {
         const firstCard = document.querySelector('.card:first-child');
