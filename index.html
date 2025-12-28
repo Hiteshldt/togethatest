@@ -2,209 +2,205 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 3rd month, love</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Our Memory Gallery</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        @font-face {
-            font-family: 'Beachday';
-            src: url('beachday.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-    </style>
 </head>
 <body>
-    <!-- PIN Lock Screen -->
-    <div id="lockScreen" class="lock-screen">
-        <div class="lock-container">
-            <div class="lock-icon">🔒</div>
-            <h2 class="lock-title">Enter PIN</h2>
-            <div class="pin-input-container">
-                <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autofocus>
-            </div>
-            <button class="unlock-btn" onclick="checkPin()">Unlock</button>
-            <div id="errorMessage" class="error-message"></div>
+
+    <div class="floating-gifs">
+        <img src="1.gif" class="floating-gif gif1">
+        <img src="2.gif" class="floating-gif gif2">
+        <img src="3.gif" class="floating-gif gif3">
+        <img src="4.gif" class="floating-gif gif4">
+        <img src="5.gif" class="floating-gif gif5">
+        <img src="6.gif" class="floating-gif gif6">
+        <img src="7.gif" class="floating-gif gif7">
+    </div>
+
+    <div id="lockScreen" class="full-screen-modal">
+        <div class="modal-box">
+            <h2>PIN Required</h2>
+            <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••">
+            <button class="pixel-btn" onclick="checkPin()">UNLOCK</button>
         </div>
     </div>
 
-    <div class="container" id="mainContent" style="display: none;">
+    <div class="container hidden" id="galleryView">
         <header class="cute-header">
-            <h2 class="love-title">have your seat, get comfy</h2>
-            <p class="cast-text"> -> doiodoi and hitesh</p>
+            <h2 class="love-title">Choose Memory</h2>
+            <p>doiodoi ❤️ hitesh</p>
         </header>
 
-        <div class="swipe-hint">
-            <div class="arrow-left">‹</div>
-            <span class="swipe-text">Swipe swipe</span>
-            <div class="arrow-right">›</div>
+        <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center;">
+            <div onclick="openCollection('august')" style="cursor:pointer; text-align:center; background:#fff; padding:20px; border:4px solid #4a2c0f; box-shadow:6px 6px 0 #4a2c0f;">
+                <div style="font-size:3rem;">💕</div>
+                <div style="font-family:'Press Start 2P'; margin-top:10px;">August</div>
+            </div>
+
+            <div onclick="openCollection('christmas')" style="cursor:pointer; text-align:center; background:#2d0d0d; color:#ffd700; padding:20px; border:4px solid #8b0000; box-shadow:6px 6px 0 #000;">
+                <div style="font-size:3rem;">🎄</div>
+                <div style="font-family:'Press Start 2P'; margin-top:10px;">XMAS</div>
+            </div>
         </div>
+    </div>
+
+    <div class="container card-collection hidden" id="augustCollection">
+        <button class="nav-btn" style="position:fixed; top:20px; left:20px;" onclick="backToGallery()">←</button>
         
         <div class="swiper-container">
             <div class="card-wrapper">
-                <!-- Card 1: Opening -->
-                <div class="card">
+                <div class="card active">
                     <div class="card-content">
                         <p class="card-text">ready miss?</p>
-                        <div class="gif-decoration">
-                            <img src="totoro.gif" class="cute-gif" alt="Celebration">
-                        </div>
+                        <img src="totoro.gif" class="cute-gif">
                     </div>
                 </div>
-
-                <!-- Card 2: Gratitude -->
                 <div class="card">
                     <div class="card-content">
-                        <p class="card-text">thank you for being you, the way you are, the way your treat people and the way you treat me, and ...</p>
-                        <div class="gif-decoration">
-                            <img src="jiji-cat.gif" class="cute-gif" alt="Gratitude">
-                        </div>
+                        <img src="photo1.jpg" class="media-medium"> 
+                        <p class="card-text">thank you for being you...</p>
                     </div>
                 </div>
-
-                <!-- Card 3: Letter Purpose -->
-                <div class="card">
-                    <div class="card-content">
-                        <p class="card-text">this is just a little gallery, you could say,the way I see you, and …</p>
-                        <div class="gif-decoration">
-                            <img src="susuwatari-studio-ghibli.gif" class="cute-gif" alt="Love letter">
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Card 4: Appreciation -->
-                <div class="card">
-                    <div class="card-content">
-                        <p class="card-text">thank you so much for teaching me what love actually is, you good at it miss, very good, and ...</p>
-                        <div class="gif-decoration">
-                            <img src="21d14b1b1d143a2a26d20870d6eea7e8.gif" class="cute-gif" alt="Love appreciation">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5: Role Description -->
-                <div class="card">
-                    <div class="card-content">
-                        <p class="card-text">Thank you so much for being such a good friend, a partner, and the best girlfriend, the best I could have ever asked for.”</p>
-                        <div class="gif-decoration">
-                            <img src="waal-boyss-otw.gif" class="cute-gif" alt="Best girlfriend">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 9: Image 1 -->
-                <div class="card">
-                    <div class="card-content">
-                        <div class="image-container">
-                            <img src="1.PNG" alt="Our beautiful memory" class="card-image">
-                        </div>
-                        <div class="gif-decoration">
-                            <img src="4ae7589d934777eb4d2462020cc0c414.gif" class="cute-gif" alt="Memory celebration">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 10: Image 2 -->
-                <div class="card">
-                    <div class="card-content">
-                        <div class="image-container">
-                            <img src="2.JPG" alt="togetha" class="card-image">
-                        </div>
-                        <div class="gif-decoration">
-                            <img src="d09893d17b977a53177a5e90d3fdd7f200626338r1-500-246_hq.gif" class="cute-gif" alt="Sweet moments">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 8: Final Declaration -->
-                <div class="card">
-                    <div class="card-content">
-                        <p class="card-text">this is my pov of how I see you, just how prettty of a girlfriend you are</p>
-                        <div class="gif-decoration">
-                            <img src="totoro.gif" class="cute-gif" alt="I love you">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 11: Video -->
-                <div class="card">
-                    <div class="card-content">
-                        <div class="video-container">
-                            <video controls preload="metadata" class="card-video">
-                                <source src="video2.MP4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 12: Final Game Page -->
-                <div class="card">
-                    <div class="card-content">
-                        <h2 class="final-title">I love you</h2>
-                        <button class="play-game-btn" onclick="openGame()">Play Now</button>
-                        <div class="gif-decoration">
-                            <img src="totoro.gif" class="cute-gif" alt="Love">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation -->
             <div class="navigation">
-                <button class="nav-btn prev-btn" onclick="previousCard()">
-                    <span class="nav-icon">‹</span>
-                </button>
-                <div class="dots-container">
-                    <span class="dot active" onclick="currentCard(1)"></span>
-                    <span class="dot" onclick="currentCard(2)"></span>
-                    <span class="dot" onclick="currentCard(3)"></span>
-                    <span class="dot" onclick="currentCard(4)"></span>
-                    <span class="dot" onclick="currentCard(5)"></span>
-                    <span class="dot" onclick="currentCard(7)"></span>
-                    <span class="dot" onclick="currentCard(9)"></span>
-                    <span class="dot" onclick="currentCard(10)"></span>
-                    <span class="dot" onclick="currentCard(11)"></span>
-                    <span class="dot" onclick="currentCard(12)"></span>
+                <button class="nav-btn" onclick="prevCard()">‹</button>
+                <button class="nav-btn" onclick="nextCard()">›</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container card-collection christmas-collection hidden" id="christmasCollection">
+        <button class="nav-btn christmas-btn" style="position:fixed; top:20px; left:20px;" onclick="backToGallery()">←</button>
+        <header class="cute-header">
+            <h2 class="christmas-title">Merry Christmas 🎄</h2>
+        </header>
+
+        <div class="swiper-container">
+            <div class="card-wrapper">
+                
+                <div class="card christmas-themed active">
+                    <div class="card-content">
+                        <p class="card-text">happy YASUU birtday love, and new year happy yes 🎄✨</p>
+                        <img src="b57195740555db2993f209e0b0ed9ae4.gif" class="cute-gif">
+                    </div>
                 </div>
-                <button class="nav-btn next-btn" onclick="nextCard()">
-                    <span class="nav-icon">›</span>
-                </button>
+
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <img src="1.PNG" class="media-medium">
+                        <p class="card-text">Every moment with you feels like magic...</p>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">You make every season brighter... ❄️</p>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <video controls class="media-large">
+                            <source src="video2.MP4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">I choose you every time 💖</p>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <img src="2.JPG" class="media-medium">
+                    </div>
+                </div>
+
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">Thank you for being my greatest gift 🎁</p>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed" id="gameCard">
+                    <div class="card-content">
+                        <h2 class="christmas-title">Win the Gift!</h2>
+                        <p class="card-text">Catch the <span style="color:#fff; text-shadow:0 0 5px gold;">GLOWING GOLD</span> toy!</p>
+                        <button class="pixel-btn christmas-btn" onclick="openGame()">PLAY CLAW MACHINE</button>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed hidden" id="timerCard">
+                    <div class="card-content">
+                        <h2 class="christmas-title">Prize Locked 🔒</h2>
+                        <div class="timer-display" id="timerDisplay">Wait...</div>
+                        
+                        <div id="codeInputArea" class="hidden">
+                            <p class="card-text">Enter Secret Code:</p>
+                            <input type="text" id="secretCodeInput" class="pin-input">
+                            <button class="pixel-btn christmas-btn" onclick="checkSecretCode()">UNLOCK</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed hidden locked-content">
+                    <div class="card-content">
+                        <h2 class="christmas-title">Unlocked!</h2>
+                        <p class="card-text">You found the secret message! ❤️</p>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed hidden locked-content">
+                    <div class="card-content">
+                        <video controls class="media-large">
+                            <source src="hidden-video.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed hidden locked-content">
+                    <div class="card-content">
+                        <p class="card-text">Just one more thing...</p>
+                    </div>
+                </div>
+
+                <div class="card christmas-themed hidden locked-content">
+                    <div class="card-content">
+                        <img src="hidden-photo.jpg" class="media-medium">
+                    </div>
+                </div>
+
+                <div class="card christmas-themed hidden locked-content">
+                    <div class="card-content">
+                        <img src="final-combo.jpg" class="media-small">
+                        <p class="card-text" style="border:2px dashed #ffd700; padding:10px;">
+                            My dearest love,<br>
+                            This is the end of the digital gallery, but the start of forever.<br>
+                            I love you. ❤️
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="navigation">
+                <button class="nav-btn" onclick="prevCard()">‹</button>
+                <button class="nav-btn" onclick="nextCard()">›</button>
             </div>
         </div>
     </div>
 
-    <!-- Page navigation indicators -->
-    <div class="page-indicator left" id="prevIndicator">‹</div>
-    <div class="page-indicator right" id="nextIndicator">›</div>
-
-    <!-- Floating GIF decorations -->
-    <div class="floating-gifs">
-        <img src="totoro.gif" class="floating-gif gif1" alt="">
-        <img src="jiji-cat.gif" class="floating-gif gif2" alt="">
-        <img src="susuwatari-studio-ghibli.gif" class="floating-gif gif3" alt="">
-        <img src="21d14b1b1d143a2a26d20870d6eea7e8.gif" class="floating-gif gif4" alt="">
-        <img src="4ae7589d934777eb4d2462020cc0c414.gif" class="floating-gif gif5" alt="">
-        <img src="d09893d17b977a53177a5e90d3fdd7f200626338r1-500-246_hq.gif" class="floating-gif gif6" alt="">
-        <img src="waal-boyss-otw.gif" class="floating-gif gif7" alt="">
-    </div>
-
-    <!-- Game Modal -->
-    <div id="gameModal" class="game-modal">
-        <div class="game-container">
-            <div class="game-header">
-                <h3>lesgo geng</h3>
-                <button class="close-game" onclick="closeGame()">×</button>
-            </div>
-            <canvas id="gameCanvas" width="400" height="600"></canvas>
-            <div class="game-ui">
-                <div class="experience">Experience: <span id="expCount">0</span></div>
-                <div class="game-message" id="gameMessage"></div>
-            </div>
+    <div id="gameModal" class="full-screen-modal hidden" style="background:rgba(0,0,0,0.95);">
+        <div class="modal-box" style="background:#222; border-color:#888;">
+            <h3 style="color:#fff;">Tap to Drop!</h3>
+            <canvas id="gameCanvas"></canvas>
+            <button class="pixel-btn" onclick="closeGame()">EXIT</button>
         </div>
     </div>
-    </div>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

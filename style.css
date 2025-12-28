@@ -1,1055 +1,151 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #f5ebe0;
+    --border-color: #4a2c0f;
+    --accent-color: #b08968;
+    --text-color: #4a2c0f;
 }
+
+* { box-sizing: border-box; image-rendering: pixelated; -webkit-tap-highlight-color: transparent; }
 
 body {
-    font-family: 'Beachday', 'Comfortaa', cursive;
-    background: linear-gradient(135deg, #f5ebe0 0%, #ede0d4 30%, #e6ccb2 70%, #ddb892 100%),
-                radial-gradient(circle at 20% 80%, rgba(237, 224, 212, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(230, 204, 178, 0.3) 0%, transparent 50%);
-    min-height: 100vh;
-    overflow-x: hidden;
-    color: #7f5539;
-    position: relative;
+    margin: 0; padding: 0;
+    font-family: 'Silkscreen', monospace;
+    background: repeating-linear-gradient(0deg, #2d1b00 0px, #2d1b00 2px, #3d2814 2px, #3d2814 4px),
+                linear-gradient(135deg, #f5ebe0 0%, #ede0d4 30%, #e6ccb2 70%, #ddb892 100%);
+    height: 100vh; overflow: hidden;
+    color: var(--text-color);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: -1;
-}
-
-.container {
-    max-width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-/* Cute Header */
-.cute-header {
-    text-align: center;
-    margin-bottom: 30px;
-    position: relative;
-}
-
-.love-title {
-    font-family: 'Beachday', 'Nunito', sans-serif;
-    font-size: 3rem;
-    font-weight: 800;
-    color: #9c6644;
-    /* Anime-style text with outline */
-    text-shadow:
-        3px 3px 0px rgba(127, 85, 57, 0.4),
-        -1px -1px 0px rgba(255, 255, 255, 0.9),
-        2px 2px 8px rgba(156, 102, 68, 0.5);
-    margin-bottom: 20px;
-    position: relative;
-    letter-spacing: 1px;
-}
-
-
-.cast-text {
-    font-family: 'Beachday', 'Quicksand', sans-serif;
-    font-size: 1rem;
-    color: #9c7a5f;
-    text-align: center;
-    margin-top: 10px;
-    font-style: italic;
-    letter-spacing: 0.5px;
-    opacity: 0.9;
-}
-
-/* Swipe Hint */
-.swipe-hint {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px 0;
-    animation: fadeInOut 3s ease-in-out infinite;
-}
-
-.swipe-text {
-    font-family: 'Beachday', sans-serif;
-    font-size: 0.9rem;
-    color: #9c7a5f;
-    opacity: 0.85;
-}
-
-.arrow-left, .arrow-right {
-    font-size: 1.5rem;
-    color: #b08968;
-    animation: glowPulse 2s ease-in-out infinite;
-}
-
-.arrow-left {
-    animation-delay: 0s;
-}
-
-.arrow-right {
-    animation-delay: 1s;
-}
-
-@keyframes glowPulse {
-    0%, 100% {
-        opacity: 0.6;
-        text-shadow: 0 0 5px rgba(176, 137, 104, 0.4);
-    }
-    50% {
-        opacity: 1;
-        text-shadow: 0 0 15px rgba(176, 137, 104, 0.7);
-    }
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-}
-
-/* Swiper Container */
-.swiper-container {
-    width: 100%;
-    max-width: 500px;
-    position: relative;
-    height: 600px;
-    perspective: 1000px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-.card-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-/* Card Styles - Anime/Manga Paper Pages */
-.card {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    visibility: hidden;
-    background:
-        /* Paper fiber texture */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise' /%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60' /%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.12'/%3E%3C/svg%3E"),
-        /* Halftone manga screen tone */
-        radial-gradient(circle at 20% 30%, rgba(176, 137, 104, 0.06) 1px, transparent 1px),
-        radial-gradient(circle at 80% 70%, rgba(176, 137, 104, 0.06) 1px, transparent 1px),
-        /* Base gradient */
-        linear-gradient(135deg, #faf5f0 0%, #f5ebe0 50%, #ede0d4 100%),
-        radial-gradient(circle at 70% 30%, rgba(237, 224, 212, 0.4) 0%, transparent 60%);
-    background-size: 100% 100%, 8px 8px, 8px 8px, 100% 100%, 100% 100%;
-    background-position: 0 0, 0 0, 4px 4px, 0 0, 0 0;
-    border-radius: 25px;
-    box-shadow:
-        /* Anime cel-shading style shadow */
-        0 12px 35px rgba(127, 85, 57, 0.2),
-        0 4px 15px rgba(156, 102, 68, 0.15),
-        /* Inner shadow for depth */
-        inset 0 1px 0 rgba(255, 255, 255, 0.8),
-        inset 0 -2px 3px rgba(156, 102, 68, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 50px;
-    opacity: 0;
-    transform: translateX(100%) rotateY(45deg) scale(0.8);
-    transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
-    /* Manga-style bold border */
-    border: 3px solid #b08968;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-/* Manga speed lines effect on card edges */
-.card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-        linear-gradient(90deg, transparent 0%, rgba(139, 115, 85, 0.03) 50%, transparent 100%),
-        linear-gradient(0deg, transparent 0%, rgba(139, 115, 85, 0.03) 50%, transparent 100%);
-    pointer-events: none;
-    border-radius: 22px;
-    opacity: 0.5;
-}
-
-.card.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0) rotateY(0deg) scale(1);
-    z-index: 10;
-    pointer-events: auto;
-}
-
-.card.prev {
-    opacity: 0.3;
-    transform: translateX(-100%) rotateY(-45deg) scale(0.8);
-    z-index: 5;
-}
-
-.card.next {
-    opacity: 0.3;
-    transform: translateX(100%) rotateY(45deg) scale(0.8);
-    z-index: 5;
-}
-
-.card-content {
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    position: relative;
-    z-index: 1;
-}
-
-.card-title {
-    font-family: 'Beachday', 'Nunito', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #9c6644;
-    margin-bottom: 25px;
-    /* Anime-style bold text shadow */
-    text-shadow:
-        2px 2px 0px rgba(127, 85, 57, 0.3),
-        -1px -1px 0px rgba(255, 255, 255, 1),
-        3px 3px 8px rgba(156, 102, 68, 0.5);
-    position: relative;
-    letter-spacing: 0.5px;
-}
-
-.card-text {
-    font-family: 'Beachday', 'Quicksand', sans-serif;
-    font-size: 1.6rem;
-    line-height: 2.1;
-    color: #6b4423;
-    text-align: center;
-    font-weight: 600;
-    max-width: 500px;
-    letter-spacing: 0.5px;
-    margin: 25px auto;
-    padding: 25px;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-}
-
-.cute-decoration {
-    font-size: 1.2rem;
-    margin-top: 15px;
-    animation: decorationFloat 3s ease-in-out infinite;
-}
-
-
-@keyframes gentleFloat {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-8px) rotate(5deg); }
-}
-
-
-@keyframes decorationFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
-
-/* Image and Video Containers */
-.image-container, .video-container {
-    width: 100%;
-    max-width: 350px;
-    margin: 20px 0;
-}
-
-.card-image {
-    width: 250px;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 15px;
-    /* Anime-style bold shadow and border */
-    box-shadow:
-        0 10px 25px rgba(127, 85, 57, 0.3),
-        0 4px 0px rgba(156, 102, 68, 0.25),
-        inset 0 -2px 0px rgba(0, 0, 0, 0.08);
-    border: 4px solid #b08968;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    /* Subtle anime color adjustment */
-    filter: contrast(1.1) saturate(1.2) brightness(1.05);
-    position: relative;
-}
-
-.card-image:hover {
-    transform: scale(1.05);
-}
-
-.card-video {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 15px;
-    /* Anime-style shadow */
-    box-shadow:
-        0 10px 25px rgba(127, 85, 57, 0.3),
-        0 4px 0px rgba(156, 102, 68, 0.25);
-    border: 4px solid #b08968;
-    background: linear-gradient(45deg, #faf5f0, #f5ebe0);
-    /* Subtle anime color grading */
-    filter: contrast(1.1) saturate(1.2) brightness(1.05);
-}
-
-.card-video:focus {
-    outline: 3px solid rgba(255, 182, 193, 0.5);
-    outline-offset: 3px;
-}
-
-/* Navigation */
-.navigation {
-    position: absolute;
-    bottom: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background:
-        /* Paper texture on navigation */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='navPaper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23navPaper)' opacity='0.08'/%3E%3C/svg%3E"),
-        linear-gradient(145deg, rgba(250, 245, 240, 0.98), rgba(245, 235, 225, 0.95));
-    padding: 15px 25px;
-    border-radius: 30px;
-    /* Anime-style bold shadow */
-    box-shadow:
-        0 10px 30px rgba(127, 85, 57, 0.25),
-        0 4px 0px rgba(156, 102, 68, 0.2);
-    backdrop-filter: blur(10px);
-    border: 3px solid #b08968;
-}
-
-.nav-btn {
-    background: linear-gradient(145deg, #e6ccb2, #ddb892);
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(127, 85, 57, 0.25);
-    border: 2px solid #b08968;
-    color: #6b4423;
-    font-weight: 600;
-}
-
-.nav-btn:hover {
-    transform: translateY(-3px) scale(1.1);
-    box-shadow: 0 8px 25px rgba(225, 200, 180, 0.4);
-    background: linear-gradient(145deg, #f0e6d6, #f5d7d7);
-}
-
-.nav-btn:active {
-    transform: translateY(-1px) scale(1.05);
-}
-
-.nav-icon {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.dots-container {
-    display: flex;
-    gap: 10px;
-}
-
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(225, 200, 180, 0.5);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(200, 170, 150, 0.3);
-}
-
-.dot.active {
-    background: linear-gradient(145deg, #f5d7d7, #f0e6d6);
-    transform: scale(1.3);
-    box-shadow: 0 0 10px rgba(225, 200, 180, 0.6);
-}
-
-.dot:hover {
-    background: rgba(225, 200, 180, 0.8);
-    transform: scale(1.2);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
-    .love-title {
-        font-size: 2.5rem;
-        line-height: 1.3;
-    }
-
-    .cast-text {
-        font-size: 0.9rem;
-    }
-
-    .swiper-container {
-        height: 520px;
-        max-width: 100%;
-        padding: 0 5px;
-    }
-
-    .card {
-        padding: 25px 20px;
-        border-radius: 20px;
-    }
-
-    .card-title {
-        font-size: 2rem;
-        margin-bottom: 20px;
-        line-height: 1.2;
-    }
-
-    .card-text {
-        font-size: 1.35rem;
-        line-height: 1.9;
-        padding: 15px;
-        margin: 15px auto;
-    }
-
-    .card-image {
-        width: 220px;
-        height: 220px;
-    }
-
-    .card-video {
-        max-width: 260px;
-    }
-
-    .navigation {
-        bottom: -75px;
-        padding: 12px 18px;
-        gap: 12px;
-    }
-
-    .nav-btn {
-        width: 48px;
-        height: 48px;
-    }
-
-    .nav-icon {
-        font-size: 1.1rem;
-    }
-
-    .dot {
-        width: 10px;
-        height: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        overflow-x: hidden;
-    }
-
-    .container {
-        padding: 8px;
-    }
-
-    .love-title {
-        font-size: 2.2rem;
-        line-height: 1.2;
-        margin-bottom: 15px;
-    }
-
-    .cast-text {
-        font-size: 0.85rem;
-    }
-
-    .swiper-container {
-        height: 500px;
-        max-width: 100%;
-    }
-
-    .card {
-        padding: 20px 15px;
-        border-radius: 18px;
-    }
-
-    .card-title {
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-        line-height: 1.3;
-    }
-
-    .card-text {
-        font-size: 1.25rem;
-        line-height: 1.8;
-        padding: 12px;
-        margin: 12px auto;
-    }
-
-    .card-image {
-        width: 200px;
-        height: 200px;
-    }
-
-    .card-video {
-        max-width: 220px;
-    }
-
-    .navigation {
-        bottom: -70px;
-        padding: 10px 15px;
-        gap: 10px;
-    }
-
-    .nav-btn {
-        width: 42px;
-        height: 42px;
-    }
-
-    .nav-icon {
-        font-size: 1rem;
-    }
-
-    .dot {
-        width: 9px;
-        height: 9px;
-    }
-
-    .floating-gif {
-        width: 45px;
-        height: 45px;
-    }
-
-    .game-container {
-        padding: 12px;
-        max-width: 96vw;
-        max-height: 92vh;
-    }
-
-    #gameCanvas {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        max-height: 65vh;
-    }
-
-    .game-header h3 {
-        font-size: 1.3rem;
-    }
-
-    .experience {
-        font-size: 1rem;
-    }
-
-    .final-title {
-        font-size: 2.2rem;
-        line-height: 1.3;
-    }
-
-    .play-game-btn {
-        padding: 14px 32px;
-        font-size: 1.15rem;
-    }
-
-    .cute-gif {
-        width: 85px;
-        height: 85px;
-    }
-}
-
-/* Final Page Styling */
-.final-title {
-    font-family: 'Beachday', sans-serif;
-    font-size: 3rem;
-    color: #9c6644;
-    text-align: center;
-    margin-bottom: 30px;
-    /* Anime-style dramatic text shadow */
-    text-shadow:
-        3px 3px 0px rgba(127, 85, 57, 0.4),
-        -1px -1px 0px rgba(255, 255, 255, 1),
-        4px 4px 12px rgba(156, 102, 68, 0.5);
-}
-
-.play-game-btn {
-    background: linear-gradient(145deg, #e6ccb2, #ddb892);
-    border: none;
-    border-radius: 25px;
-    padding: 15px 40px;
-    font-family: 'Beachday', sans-serif;
-    font-size: 1.2rem;
-    color: #6b4423;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(127, 85, 57, 0.3);
-    border: 3px solid #b08968;
-}
-
-.play-game-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(225, 200, 180, 0.4);
-    background: linear-gradient(145deg, #f0e6d6, #f5d7d7);
-}
-
-/* Game Modal */
-.game-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.game-modal.show {
-    display: flex;
-}
-
-.game-container {
-    background:
-        /* Paper texture */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='gamePaper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gamePaper)' opacity='0.08'/%3E%3C/svg%3E"),
-        linear-gradient(135deg, #faf5f0, #f5ebe0);
-    border-radius: 20px;
-    padding: 20px;
-    /* Anime-style dramatic shadow */
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.3),
-        0 8px 0px rgba(127, 85, 57, 0.3);
-    position: relative;
-    margin: auto;
-    max-width: 450px;
-    width: 90vw;
-    border: 4px solid #b08968;
-}
-
-.game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.game-header h3 {
-    font-family: 'Beachday', sans-serif;
-    color: #9c6644;
-    font-size: 1.5rem;
-    margin: 0;
-    font-weight: 700;
-}
-
-.close-game {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: #a08570;
-    cursor: pointer;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.close-game:hover {
-    color: #8b7355;
-}
-
-#gameCanvas {
-    border: 4px solid #b08968;
-    border-radius: 15px;
-    background: linear-gradient(180deg, #e6f3ff, #f0f8ff);
-    display: block;
-    touch-action: none;
-    user-select: none;
-    cursor: pointer;
-    width: 100%;
-    max-width: 400px;
-    height: 600px;
-    margin: 0 auto;
-    /* Anime-style inset shadow */
-    box-shadow:
-        inset 0 2px 8px rgba(127, 85, 57, 0.15),
-        0 4px 0px rgba(156, 102, 68, 0.2);
-}
-
-.game-ui {
-    margin-top: 15px;
-    text-align: center;
-}
-
-.experience {
-    font-family: 'Beachday', sans-serif;
-    color: #7f5539;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.game-message {
-    font-family: 'Beachday', sans-serif;
-    color: #9c6644;
-    font-size: 0.9rem;
-    min-height: 40px;
-    animation: messageGlow 0.5s ease-in-out;
-    line-height: 1.3;
-    padding: 5px;
-    max-width: 350px;
-    margin: 0 auto;
-    word-wrap: break-word;
-    font-weight: 600;
-}
-
-@keyframes messageGlow {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-/* GIF Decorations */
-.cute-gif {
-    width: 100px;
-    height: 100px;
-    border-radius: 20px;
-    object-fit: cover;
-    margin: 10px;
-    /* Anime-style bold shadow */
-    box-shadow:
-        0 8px 20px rgba(127, 85, 57, 0.3),
-        0 3px 0px rgba(156, 102, 68, 0.25);
-    border: 3px solid #b08968;
-    transition: transform 0.3s ease;
-    /* Anime color enhancement */
-    filter: contrast(1.15) saturate(1.25) brightness(1.05);
-}
-
-.cute-gif:hover {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.gif-decoration {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px 0;
-}
-
-/* Touch/Swipe Support */
-.card-wrapper {
-    touch-action: pan-y;
-    user-select: none;
-}
-
-/* Smooth scrolling for better mobile experience */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Floating GIF Animations */
+/* ═══════════════════════════════════════════════════════════
+ * GLOWING FLOATING ANIMATION
+ * ═══════════════════════════════════════════════════════════ */
 .floating-gifs {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 1;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1; 
 }
 
 .floating-gif {
     position: absolute;
-    width: 60px;
-    height: 60px;
-    border-radius: 15px;
-    object-fit: cover;
+    width: 60px; height: 60px;
+    object-fit: contain;
     opacity: 0;
-    animation: floatAndFade 8s ease-in-out infinite;
+    /* Glow Effect */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) brightness(1.2);
+    animation: floatGlow 12s ease-in-out infinite;
 }
 
-.gif1 {
-    top: 10%;
-    left: 5%;
-    animation-delay: 0s;
+/* Positions & Delays for 7 GIFs */
+.gif1 { top: 10%; left: 5%; animation-delay: 0s; }
+.gif2 { top: 20%; right: 10%; animation-delay: 2s; }
+.gif3 { bottom: 30%; left: 8%; animation-delay: 4s; }
+.gif4 { top: 40%; right: 5%; animation-delay: 6s; }
+.gif5 { bottom: 15%; left: 15%; animation-delay: 1s; }
+.gif6 { bottom: 25%; right: 20%; animation-delay: 3s; }
+.gif7 { top: 80%; left: 50%; animation-delay: 5s; }
+
+@keyframes floatGlow {
+    0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+    20% { opacity: 0.7; } /* Fade in */
+    50% { opacity: 0.9; transform: translateY(-15px) scale(1); filter: drop-shadow(0 0 15px #fff) brightness(1.5); } /* Flash/Glow */
+    80% { opacity: 0.7; }
+    100% { opacity: 0; transform: translateY(-40px) scale(0.8); }
 }
 
-.gif2 {
-    top: 20%;
-    right: 10%;
-    animation-delay: 1.5s;
+/* ═══════════════════════════════════════════════════════════
+ * LAYOUT & CARDS
+ * ═══════════════════════════════════════════════════════════ */
+.container { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; }
+.hidden { display: none !important; }
+
+/* Swiper */
+.swiper-container {
+    width: 95%; max-width: 550px; height: 75vh;
+    position: relative; margin: 10px auto;
+}
+.card-wrapper { width: 100%; height: 100%; position: relative; perspective: 1000px; }
+
+/* Cards */
+.card {
+    position: absolute; width: 100%; height: 100%;
+    background: #f5ebe0;
+    border: 4px solid var(--border-color);
+    box-shadow: 8px 8px 0px var(--border-color);
+    padding: 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transform: translateX(100%) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow-y: auto;
 }
 
-.gif3 {
-    top: 60%;
-    left: 8%;
-    animation-delay: 3s;
-}
+.card.active { opacity: 1; visibility: visible; transform: translateX(0) scale(1); z-index: 10; }
+.card.prev { transform: translateX(-120%) rotateY(-10deg); }
+.card.next { transform: translateX(120%) rotateY(10deg); }
 
-.gif4 {
-    top: 40%;
-    right: 5%;
-    animation-delay: 4.5s;
-}
+.card-content { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
 
-.gif5 {
-    bottom: 20%;
-    left: 15%;
-    animation-delay: 6s;
-}
+/* SIZING CLASSES - Use these in HTML */
+.media-small { height: 100px; object-fit: contain; }
+.media-medium { height: 250px; width: 100%; object-fit: cover; border: 3px solid var(--border-color); }
+.media-large { height: 40vh; width: 100%; object-fit: contain; background: #000; border: 3px solid var(--border-color); }
 
-.gif6 {
-    bottom: 30%;
-    right: 20%;
-    animation-delay: 2s;
-}
+/* Decoration GIF inside cards */
+.cute-gif { width: 60px; height: 60px; object-fit: contain; }
 
-.gif7 {
-    top: 80%;
-    left: 50%;
-    animation-delay: 7s;
-}
+/* Text */
+.card-text { font-size: 1rem; line-height: 1.6; }
+.love-title { font-family: 'Press Start 2P'; font-size: 1.5rem; text-shadow: 2px 2px 0px #d4a574; margin-bottom: 10px; }
 
-@keyframes floatAndFade {
-    0% {
-        opacity: 0;
-        transform: translateY(20px) rotate(0deg) scale(0.8);
-    }
-    20% {
-        opacity: 0.3;
-    }
-    50% {
-        opacity: 0.6;
-        transform: translateY(-10px) rotate(5deg) scale(1);
-    }
-    80% {
-        opacity: 0.3;
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-30px) rotate(-5deg) scale(0.8);
-    }
+/* Buttons */
+.pixel-btn {
+    font-family: 'Press Start 2P'; padding: 15px 20px;
+    background: #e6ccb2; border: 3px solid var(--border-color);
+    box-shadow: 4px 4px 0px var(--border-color); cursor: pointer;
 }
+.pixel-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0px var(--border-color); }
 
-/* Additional cute animations */
-@keyframes slideInFromRight {
-    0% {
-        opacity: 0;
-        transform: translateX(100%) rotateY(45deg) scale(0.8);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0) rotateY(0deg) scale(1);
-    }
+.nav-btn {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--border-color);
+    box-shadow: 4px 4px 0px var(--border-color);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
+.navigation { position: absolute; bottom: -65px; display: flex; gap: 20px; }
 
-@keyframes slideOutToLeft {
-    0% {
-        opacity: 1;
-        transform: translateX(0) rotateY(0deg) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(-100%) rotateY(-45deg) scale(0.8);
-    }
+/* ═══════════════════════════════════════════════════════════
+ * MODALS (Lock, Game)
+ * ═══════════════════════════════════════════════════════════ */
+.full-screen-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-color); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
 }
-/* PIN Lock Screen */
-.lock-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #f5ebe0 0%, #ede0d4 30%, #e6ccb2 70%, #ddb892 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
+.modal-box {
+    background: #fff; padding: 30px; border: 4px solid var(--border-color);
+    box-shadow: 8px 8px 0px var(--border-color); text-align: center;
 }
-
-.lock-container {
-    background:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='lockPaper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' /%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60' /%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lockPaper)' opacity='0.12'/%3E%3C/svg%3E"),
-        linear-gradient(135deg, #faf5f0 0%, #f5ebe0 50%, #ede0d4 100%);
-    padding: 50px 40px;
-    border-radius: 25px;
-    box-shadow:
-        0 15px 40px rgba(127, 85, 57, 0.25),
-        0 5px 15px rgba(156, 102, 68, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    border: 3px solid #b08968;
-    text-align: center;
-    min-width: 320px;
-}
-
-.lock-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    animation: lockPulse 2s ease-in-out infinite;
-}
-
-@keyframes lockPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-.lock-title {
-    font-family: 'Beachday', sans-serif;
-    font-size: 2rem;
-    color: #9c6644;
-    margin-bottom: 30px;
-    text-shadow:
-        2px 2px 0px rgba(127, 85, 57, 0.3),
-        -1px -1px 0px rgba(255, 255, 255, 1),
-        2px 2px 6px rgba(156, 102, 68, 0.4);
-}
-
-.pin-input-container {
-    margin-bottom: 25px;
-}
-
 .pin-input {
-    font-family: 'Beachday', monospace;
-    font-size: 1.8rem;
-    padding: 15px 20px;
-    border: 3px solid #b08968;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #6b4423;
-    text-align: center;
-    letter-spacing: 8px;
-    width: 200px;
-    outline: none;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 2px 5px rgba(127, 85, 57, 0.1);
+    font-family: 'Press Start 2P'; font-size: 1.2rem; text-align: center;
+    padding: 10px; margin: 15px 0; border: 3px solid var(--border-color); letter-spacing: 5px; width: 180px;
 }
+canvas { background: #222; border: 4px solid #fff; max-width: 100%; image-rendering: pixelated; }
 
-.pin-input:focus {
-    border-color: #9c6644;
-    box-shadow:
-        inset 0 2px 5px rgba(127, 85, 57, 0.1),
-        0 0 0 3px rgba(156, 102, 68, 0.2);
-}
+/* ═══════════════════════════════════════════════════════════
+ * CHRISTMAS THEME
+ * ═══════════════════════════════════════════════════════════ */
+.christmas-collection { background: #1a0a0a; color: #ffd700; }
+.christmas-themed { background: #2d0d0d; border-color: #8b0000; box-shadow: 6px 6px 0px #000000; }
+.christmas-themed .card-text { color: #ffd700; text-shadow: 1px 1px 0 #000; }
+.christmas-title { color: #ffd700 !important; text-shadow: 3px 3px 0px #8b0000 !important; }
+.christmas-btn { background: #8b0000; color: #ffd700; border-color: #ffd700; box-shadow: 4px 4px 0px #000; }
+.christmas-themed .media-medium, .christmas-themed .media-large { border-color: #ffd700; }
 
-.unlock-btn {
-    font-family: 'Beachday', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    padding: 15px 40px;
-    background: linear-gradient(145deg, #e6ccb2, #ddb892);
-    border: 3px solid #b08968;
-    border-radius: 25px;
-    color: #6b4423;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 6px 15px rgba(127, 85, 57, 0.25);
-}
-
-.unlock-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(127, 85, 57, 0.3);
-}
-
-.unlock-btn:active {
-    transform: translateY(0);
-}
-
-.error-message {
-    margin-top: 15px;
-    font-family: 'Beachday', sans-serif;
-    color: #c1440e;
-    font-size: 0.95rem;
-    min-height: 24px;
-    font-weight: 600;
-}
-
-/* Shake animation for wrong PIN */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-
-.pin-input.shake {
-    animation: shake 0.5s ease-in-out;
-    border-color: #c1440e;
-}
-
-/* Page indicators for swipe gestures */
-.page-indicator {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 3rem;
-    color: rgba(176, 137, 104, 0.2);
-    pointer-events: none;
-    z-index: 100;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.page-indicator.left {
-    left: 20px;
-}
-
-.page-indicator.right {
-    right: 20px;
-}
-
-.swiper-container:hover ~ .page-indicator {
-    opacity: 0.6;
-}
-
-.page-indicator.active {
-    opacity: 1;
-    animation: indicatorPulse 0.5s ease-in-out;
-}
-
-@keyframes indicatorPulse {
-    0%, 100% { transform: translateY(-50%) scale(1); }
-    50% { transform: translateY(-50%) scale(1.2); }
-}
-
-@media (max-width: 768px) {
-    .page-indicator {
-        font-size: 2.5rem;
-    }
-    
-    .page-indicator.left {
-        left: 10px;
-    }
-    
-    .page-indicator.right {
-        right: 10px;
-    }
+.timer-display {
+    font-family: 'Press Start 2P'; font-size: 1.2rem; color: #ffd700;
+    margin: 20px 0; text-shadow: 2px 2px 0 #8b0000;
 }

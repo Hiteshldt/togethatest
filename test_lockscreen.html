@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Lockscreen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="lockScreen" class="lock-screen">
+        <div class="lock-container">
+            <div class="lock-icon">🔒</div>
+            <h2 class="lock-title">PIN Pls miss</h2>
+            <div class="pin-input-container">
+                <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autofocus>
+            </div>
+            <button class="unlock-btn" onclick="alert('Button works!')">Unlock</button>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+    </div>
+</body>
+</html>
