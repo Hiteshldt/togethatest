@@ -1,0 +1,1569 @@
+/* ===== PIXEL CARD EFFECT ===== */
+/* Remove 3D perspective for pixel style */
+.christmas-collection .swiper-container {
+    perspective: none;
+    height: 650px;
+    overflow: hidden;
+    margin: 20px auto;
+    max-width: 500px;
+    touch-action: pan-y;
+}
+
+.christmas-collection .card-wrapper {
+    transform-style: flat;
+    height: 100%;
+    position: relative;
+}
+
+/* Pixel-style card transitions */
+.christmas-collection .card {
+    transform-style: flat;
+    backface-visibility: visible;
+    transition: transform 0.2s steps(5), opacity 0.2s steps(5), visibility 0.2s steps(5);
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+}
+
+.christmas-collection .card.next {
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden !important;
+}
+
+.christmas-collection .card.prev {
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden !important;
+}
+
+.christmas-collection .card.active {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+    display: flex !important;
+}
+
+/* Christmas card scrollbar */
+.christmas-collection .card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.christmas-collection .card::-webkit-scrollbar-track {
+    background: #2d0d0d;
+    border-radius: 0;
+}
+
+.christmas-collection .card::-webkit-scrollbar-thumb {
+    background: #ffd700;
+    border-radius: 0;
+    border: 2px solid #2d0d0d;
+}
+
+.christmas-collection .card::-webkit-scrollbar-thumb:hover {
+    background: #ffe066;
+}
+
+/* Christmas card content layout fix */
+.christmas-collection .card-content {
+    min-height: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    gap: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Bigger images in Christmas cards */
+.christmas-collection .card-image {
+    width: 420px;
+    height: 420px;
+    max-width: 95%;
+    max-height: 65vh;
+    object-fit: cover;
+    border: 4px solid #ffd700;
+    box-shadow: 6px 6px 0px #000;
+    cursor: zoom-in;
+    transition: transform 0.2s ease;
+}
+
+.christmas-collection .card-image:hover {
+    transform: scale(1.02);
+}
+
+/* Image Lightbox/Zoom Modal */
+.image-lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    padding: 20px;
+}
+
+.image-lightbox.active {
+    display: flex;
+}
+
+.image-lightbox img {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    border: 4px solid #ffd700;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 3rem;
+    color: #ffd700;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    text-shadow: 2px 2px 0px #000;
+    transition: transform 0.2s ease;
+    z-index: 10002;
+}
+
+.lightbox-close:hover {
+    transform: scale(1.2);
+    color: #ffe066;
+}
+
+/* Bigger videos in Christmas cards */
+.christmas-collection .card-video {
+    width: 100%;
+    max-width: 420px;
+    max-height: 60vh;
+    border: 4px solid #ffd700;
+    box-shadow: 6px 6px 0px #000;
+}
+
+/* Bigger text in Christmas cards */
+.christmas-collection .card-text {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    padding: 15px 20px;
+    margin-top: auto;
+    text-align: center;
+}
+
+/* Pixel ribbon effect - Dark Red/Gold */
+.christmas-themed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 12px;
+    height: 100%;
+    background:
+        repeating-linear-gradient(0deg,
+            #8b0000 0px,
+            #8b0000 6px,
+            #ffd700 6px,
+            #ffd700 12px
+        );
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: 4px 0 0 rgba(0, 0, 0, 0.3);
+}
+
+.christmas-themed::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background:
+        repeating-linear-gradient(90deg,
+            #8b0000 0px,
+            #8b0000 6px,
+            #ffd700 6px,
+            #ffd700 12px
+        );
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure card content is positioned for ribbon effect */
+.christmas-themed {
+    position: relative;
+    overflow-x: hidden;
+}
+
+.christmas-themed .card-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* Pixel bow decoration at center */
+.christmas-themed .card-content::before {
+    content: '🎀';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none;
+    filter: contrast(2);
+}
+
+/* ===== GALLERY VIEW ===== */
+.gallery-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: #3d2410;
+}
+
+.gallery-container .cute-header {
+    margin-bottom: 40px;
+}
+
+.gallery-container .love-title {
+    color: #ffd700;
+    text-shadow: 2px 2px 0px #1a0f05, 4px 4px 0px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-container .cast-text {
+    color: #ffe066;
+    text-shadow: 1px 1px 0px #1a0f05;
+}
+
+.gallery-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    max-width: 700px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.gallery-card {
+    background: #4a2c0f;
+    border: 4px solid #ffd700;
+    border-radius: 0;
+    padding: 50px 40px 40px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 6px 6px 0px #1a0f05;
+    position: relative;
+    overflow: hidden;
+    min-width: 260px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px #1a0f05;
+    background: #5a3a1a;
+}
+
+.gallery-card-date {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #ffd700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0px #1a0f05;
+    line-height: 1.5;
+}
+
+.gallery-card-subtitle {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1rem;
+    color: #ffe066;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 0px #1a0f05;
+}
+
+.gallery-card-emoji {
+    font-size: 4.5rem;
+    margin-top: 10px;
+    animation: galleryFloat 3s ease-in-out infinite;
+}
+
+@keyframes galleryFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Christmas Gallery Card Special Style */
+.gallery-card.christmas-card {
+    background: #8b0000;
+    border-color: #ffd700;
+}
+
+.gallery-card.christmas-card:hover {
+    background: #a01010;
+}
+
+/* Back to Gallery Button */
+.back-to-gallery {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: linear-gradient(145deg, #e6ccb2, #ddb892);
+    border: 2px solid #b08968;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #6b4423;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(127, 85, 57, 0.25);
+    padding: 0;
+}
+
+.back-to-gallery:hover {
+    transform: translateX(-3px) scale(1.05);
+    box-shadow: 0 6px 18px rgba(127, 85, 57, 0.35);
+}
+
+/* ===== CHRISTMAS THEME - DARK RED/YELLOW ===== */
+.christmas-card {
+    background: #2d0d0d;
+    border-color: #8b0000;
+}
+
+.christmas-collection {
+    background: #1a0a0a;
+}
+
+.christmas-themed {
+    background: #2d0d0d;
+    border: 4px solid #8b0000;
+    box-shadow: 6px 6px 0px #000000;
+}
+
+.christmas-themed .card-text,
+.christmas-card .card-text {
+    color: #ffe066;
+    text-shadow: 1px 1px 0px #6b0000;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.christmas-title {
+    color: #ffe066;
+    text-shadow:
+        2px 2px 0px #8b0000,
+        -1px -1px 0px #000000;
+    font-size: 1.5rem;
+}
+
+.christmas-game-title {
+    font-family: 'Silkscreen', 'Press Start 2P', monospace;
+    font-size: 1.3rem;
+    color: #ffe066;
+    text-align: center;
+    margin: 15px 0;
+    text-shadow:
+        2px 2px 0px #8b0000,
+        -1px -1px 0px #000000;
+    line-height: 1.4;
+}
+
+.christmas-final {
+    color: #ffd700;
+}
+
+.christmas-btn {
+    background: #8b0000;
+    border: 4px solid #ffd700;
+    color: #ffd700;
+    box-shadow: 4px 4px 0px #000000;
+    font-family: 'Silkscreen', monospace;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.1s linear;
+}
+
+.christmas-btn:hover {
+    background: #a00000;
+    box-shadow: 6px 6px 0px #000000;
+    transform: translate(-2px, -2px);
+}
+
+.christmas-nav {
+    border-color: #ffd700;
+}
+
+.christmas-back {
+    background: #8b0000;
+    border: 3px solid #ffd700;
+    color: #ffd700;
+}
+
+.christmas-back:hover {
+    background: #a00000;
+}
+
+/* Snowflakes */
+.snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.snowflake {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.5rem;
+    animation: snowfallGallery 3s linear infinite;
+}
+
+.snowflake:nth-child(1) {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.snowflake:nth-child(2) {
+    left: 50%;
+    animation-delay: 1s;
+}
+
+.snowflake:nth-child(3) {
+    left: 80%;
+    animation-delay: 2s;
+}
+
+@keyframes snowfallGallery {
+    0% {
+        top: -10%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        top: 110%;
+        opacity: 0;
+    }
+}
+
+/* Christmas Snowflakes */
+.christmas-snowflakes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.snow {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.5rem;
+    animation: snowfall linear infinite;
+}
+
+.snow:nth-child(1) { left: 10%; animation-duration: 8s; }
+.snow:nth-child(2) { left: 20%; animation-duration: 10s; animation-delay: 1s; }
+.snow:nth-child(3) { left: 30%; animation-duration: 12s; animation-delay: 2s; }
+.snow:nth-child(4) { left: 50%; animation-duration: 9s; }
+.snow:nth-child(5) { left: 60%; animation-duration: 11s; animation-delay: 1.5s; }
+.snow:nth-child(6) { left: 70%; animation-duration: 10s; animation-delay: 3s; }
+.snow:nth-child(7) { left: 85%; animation-duration: 8s; animation-delay: 2.5s; }
+.snow:nth-child(8) { left: 95%; animation-duration: 13s; }
+
+@keyframes snowfall {
+    0% {
+        top: -10%;
+        transform: translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        top: 110%;
+        transform: translateX(50px);
+        opacity: 0;
+    }
+}
+
+.christmas-game-container {
+    border-color: #ffd700;
+}
+
+#christmasGameCanvas {
+    background: #1a0a0a;
+    border: 4px solid #ffd700;
+    border-radius: 0;
+    box-shadow: 4px 4px 0px #000000;
+}
+
+/* ===== NEW CHRISTMAS CARD COMPONENTS ===== */
+
+/* 2x2 Photo Grid */
+.photo-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.grid-photo {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0;
+    border: 4px solid #ffd700;
+    box-shadow: 4px 4px 0px #000000;
+    transition: transform 0.1s linear;
+}
+
+.grid-photo:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000000;
+}
+
+
+.countdown-timer {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.timer-display {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    color: #ffd700;
+    font-weight: 700;
+    text-shadow:
+        2px 2px 0px #8b0000,
+        -1px -1px 0px #000000;
+    animation: timerPulse 2s ease-in-out infinite;
+    margin-bottom: 15px;
+}
+
+.timer-display.timer-complete {
+    color: #90EE90;
+    text-shadow: 2px 2px 0px #006400;
+}
+
+.countdown-units {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(139, 0, 0, 0.5);
+    padding: 10px 15px;
+    border: 2px solid #ffd700;
+    min-width: 60px;
+}
+
+.countdown-number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    color: #ffd700;
+    text-shadow: 2px 2px 0px #8b0000;
+}
+
+.countdown-label {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.6rem;
+    color: #ffd700;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+@keyframes timerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Code Lock Card */
+.code-input-container {
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.code-input {
+    width: 250px;
+    padding: 15px 20px;
+    font-family: 'Silkscreen', 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    text-align: center;
+    border: 4px solid #ffd700;
+    border-radius: 0;
+    background: #1a0a0a;
+    color: #ffd700;
+    letter-spacing: 5px;
+    box-shadow: 4px 4px 0px #000000;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 6px 6px 0px #000000;
+}
+
+.code-error {
+    font-family: 'Silkscreen', 'Press Start 2P', monospace;
+    font-size: 1.1rem;
+    color: #ff4444;
+    margin-top: 10px;
+    min-height: 25px;
+}
+
+/* Unlock Animation */
+.unlock-animation {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.gift-box {
+    font-size: 8rem;
+    animation: giftUnlock 2s ease-in-out infinite;
+}
+
+@keyframes giftUnlock {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        transform: rotate(-10deg) scale(1.1);
+    }
+    75% {
+        transform: rotate(10deg) scale(1.1);
+    }
+}
+
+/* Hidden Cards (Locked Until Code) */
+.hidden-card {
+    display: none !important;
+}
+
+.hidden-card.unlocked {
+    display: block !important;
+}
+
+/* Locked Cards (Cannot Navigate Until Code Correct) */
+.locked-card {
+    pointer-events: none;
+    user-select: none;
+}
+
+.locked-card.unlocked {
+    pointer-events: auto;
+    user-select: auto;
+}
+
+/* Visual feedback for timer and code lock cards */
+.timer-card,
+.code-lock-card {
+    position: relative;
+}
+
+.timer-card::after,
+.code-lock-card::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: #ffd700;
+    border-radius: 0;
+    opacity: 0;
+    animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+/* Reveal Text Styling */
+.reveal-text {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    color: #ffd700;
+    text-align: center;
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+/* Photo Wall Masonry */
+.photo-wall-masonry {
+    column-count: 3;
+    column-gap: 15px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.wall-photo {
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 0;
+    border: 3px solid #ffd700;
+    box-shadow: 4px 4px 0px #000000;
+    break-inside: avoid;
+    transition: transform 0.1s linear;
+}
+
+.wall-photo:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000000;
+}
+
+/* Final Letter Text */
+.final-letter {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-top: 20px;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .gallery-card-date {
+        font-size: 2rem;
+    }
+
+    .back-to-gallery {
+        top: 10px;
+        left: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+
+    .photo-grid-2x2 {
+        gap: 10px;
+    }
+
+    .grid-photo {
+        height: 150px;
+    }
+
+    .christmas-game-title {
+        font-size: 1.6rem;
+    }
+
+    .timer-display {
+        font-size: 2rem;
+        letter-spacing: 4px;
+    }
+
+    .timer-labels {
+        gap: 20px;
+    }
+
+    .time-label {
+        font-size: 0.75rem;
+    }
+
+    .code-input {
+        width: 200px;
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+    }
+
+    .photo-wall-masonry {
+        column-count: 2;
+        column-gap: 10px;
+    }
+
+    .final-letter {
+        font-size: 1rem;
+    }
+
+    .reveal-text {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+
+    .christmas-game-title {
+        font-size: 1.4rem;
+    }
+
+    .timer-display {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+
+    .timer-labels {
+        gap: 15px;
+    }
+
+    .code-input {
+        width: 180px;
+        font-size: 1.1rem;
+    }
+
+    .photo-wall-masonry {
+        column-count: 1;
+    }
+
+    .reveal-text {
+        font-size: 1.1rem;
+    }
+}
+
+/* PIXEL ART BUTTON STYLES */
+.play-game-btn, .unlock-btn {
+    font-family: 'Silkscreen', 'Press Start 2P', monospace;
+    border-radius: 0;
+    box-shadow: 4px 4px 0px #4a2c0f;
+    border: 3px solid #4a2c0f;
+    padding: 15px 30px;
+    font-size: 0.9rem;
+    transition: all 0.1s linear;
+    cursor: pointer;
+    background: #e6ccb2;
+    color: #4a2c0f;
+}
+
+.play-game-btn:hover, .unlock-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #4a2c0f;
+}
+
+.nav-btn {
+    font-family: 'Silkscreen', monospace;
+    border-radius: 0;
+    box-shadow: 3px 3px 0px #4a2c0f;
+    border: 3px solid #4a2c0f;
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════
+/* Ellipsis Separator */
+.ellipsis-separator {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2rem;
+    color: #ffd700;
+    text-align: center;
+    margin: 20px 0;
+    letter-spacing: 10px;
+    text-shadow: 2px 2px 0px #8b0000;
+}
+
+/* Win Screen */
+.win-screen {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 30px 20px;
+    background: #2d0d0d;
+    border: 4px solid #ffd700;
+    box-shadow: 6px 6px 0px #000000;
+    text-align: center;
+}
+
+.win-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    color: #ffd700;
+    text-shadow: 3px 3px 0px #8b0000, -1px -1px 0px #000000;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.win-message {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1rem;
+    color: #ffd700;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+/* Countdown Display */
+.countdown-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 25px 0;
+    flex-wrap: wrap;
+}
+
+.countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.countdown-value {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2.5rem;
+    color: #ffd700;
+    text-shadow: 4px 4px 0px #8b0000, -2px -2px 0px #000000;
+    min-width: 80px;
+    background: #1a0a0a;
+    border: 3px solid #ffd700;
+    padding: 15px 10px;
+    box-shadow: 4px 4px 0px #000000;
+}
+
+.countdown-label {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.7rem;
+    color: #ffd700;
+    text-shadow: 1px 1px 0px #000000;
+    letter-spacing: 2px;
+}
+
+.countdown-separator {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2rem;
+    color: #ffd700;
+    text-shadow: 2px 2px 0px #8b0000;
+    margin: 0 5px;
+}
+
+
+
+/* Code Input Screen */
+.code-screen {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 30px 20px;
+    background: #2d0d0d;
+    border: 4px solid #ffd700;
+    box-shadow: 6px 6px 0px #000000;
+    text-align: center;
+}
+
+.code-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.3rem;
+    color: #ffd700;
+    text-shadow: 3px 3px 0px #8b0000, -1px -1px 0px #000000;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.code-prompt {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.9rem;
+    color: #ffd700;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+.secret-code-input {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.2rem;
+    padding: 15px 20px;
+    width: 100%;
+    max-width: 350px;
+    background: #1a0a0a;
+    border: 4px solid #ffd700;
+    color: #ffd700;
+    text-align: center;
+    box-shadow: 4px 4px 0px #000000;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.secret-code-input::placeholder {
+    color: #666;
+    opacity: 0.7;
+}
+
+.secret-code-input:focus {
+    outline: none;
+    border-color: #ffff00;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 4px 4px 0px #000000;
+}
+
+.code-submit-btn {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1.1rem;
+    padding: 15px 40px;
+    background: #8b0000;
+    border: 4px solid #ffd700;
+    color: #ffd700;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000000;
+    transition: all 0.2s steps(3);
+}
+
+.code-submit-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000000;
+}
+
+.code-error {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.9rem;
+    color: #ff0000;
+    text-shadow: 2px 2px 0px #000000;
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid #ff0000;
+}
+
+/* Shake Animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+/* Final Secret Cards */
+.final-cards-section {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.final-card {
+    background: #2d0d0d;
+    border: 4px solid #ffd700;
+    box-shadow: 6px 6px 0px #000000;
+    padding: 25px 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.final-card-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.2rem;
+    color: #ffd700;
+    text-shadow: 3px 3px 0px #8b0000, -1px -1px 0px #000000;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.final-card-text {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1rem;
+    color: #ffd700;
+    line-height: 1.8;
+    text-shadow: 1px 1px 0px #8b0000;
+    margin: 15px 0;
+}
+
+.final-card .image-container {
+    margin: 15px 0;
+}
+
+.final-card .card-image {
+    max-width: 100%;
+    height: auto;
+    border: 4px solid #ffd700;
+    box-shadow: 4px 4px 0px #000000;
+}
+
+.final-card .video-container {
+    margin: 15px 0;
+}
+
+.final-card .card-video {
+    max-width: 100%;
+    height: auto;
+    border: 4px solid #ffd700;
+    box-shadow: 4px 4px 0px #000000;
+}
+
+.final-message {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 30px;
+}
+
+.final-message h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.8rem;
+    color: #ffd700;
+    text-shadow: 4px 4px 0px #8b0000, -2px -2px 0px #000000;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.final-message p {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1.2rem;
+    color: #ffd700;
+    text-shadow: 2px 2px 0px #8b0000;
+}
+
+.hidden-card {
+    display: none !important;
+}
+
+/* Mobile Responsive */
+/* Desktop specific fixes */
+@media (min-width: 769px) {
+    .gallery-container {
+        padding: 60px 40px;
+    }
+
+    .gallery-grid {
+        gap: 50px;
+        margin-top: 40px;
+    }
+
+    .gallery-card {
+        min-width: 280px;
+        min-height: 240px;
+        padding: 55px 45px 45px 45px;
+    }
+
+    .gallery-card-date {
+        font-size: 1.3rem;
+    }
+
+    .gallery-card-emoji {
+        font-size: 5rem;
+    }
+}
+
+/* Mobile gallery adjustments */
+@media (max-width: 768px) {
+    .gallery-container {
+        padding: 30px 15px;
+    }
+
+    .gallery-grid {
+        gap: 25px;
+        flex-direction: column;
+    }
+
+    .gallery-card {
+        min-width: 240px;
+        min-height: 180px;
+        padding: 35px 30px 30px 30px;
+        width: 85%;
+        max-width: 300px;
+    }
+
+    .gallery-card-date {
+        font-size: 1rem;
+    }
+
+    .gallery-card-emoji {
+        font-size: 3.5rem;
+    }
+
+    .gallery-container .love-title {
+        font-size: 1.1rem;
+    }
+
+    .gallery-container .cast-text {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .christmas-back {
+        top: 8px;
+        left: 8px;
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+
+    .christmas-collection {
+        padding: 20px 10px;
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .christmas-collection .cute-header {
+        margin-bottom: 15px;
+        flex-shrink: 0;
+    }
+
+    .christmas-collection .swipe-hint {
+        margin: 10px 0;
+        flex-shrink: 0;
+    }
+
+    .christmas-collection .swiper-container {
+        height: 600px;
+        max-width: 95%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+
+    .christmas-collection .card-wrapper {
+        height: 100%;
+    }
+
+    .christmas-collection .card {
+        padding: 15px;
+        height: 100%;
+        overflow-y: auto;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .christmas-collection .card-content {
+        gap: 20px;
+        padding: 15px;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .christmas-collection .card-image {
+        width: 350px;
+        height: 350px;
+        max-width: 92%;
+        max-height: 55vh;
+    }
+
+    .christmas-collection .card-video {
+        max-width: 95%;
+        max-height: 50vh;
+    }
+
+    .christmas-collection .card-text {
+        font-size: 1.2rem;
+        line-height: 1.7;
+        padding: 12px;
+        margin-top: auto;
+    }
+
+    .christmas-game-title {
+        font-size: 1.1rem;
+    }
+
+    .christmas-title {
+        font-size: 1.1rem;
+        line-height: 1.4;
+        margin: 8px 0;
+    }
+
+    .christmas-collection .cast-text {
+        font-size: 0.9rem;
+    }
+
+    .christmas-collection .card-text {
+        font-size: 1rem;
+        line-height: 1.7;
+        padding: 12px 15px;
+    }
+
+    .card-image, .card-video {
+        max-width: 95%;
+        max-height: 50vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .image-container, .video-container {
+        max-height: 50vh;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .cute-gif {
+        width: 70px;
+        height: 70px;
+        max-width: 70px;
+        max-height: 70px;
+    }
+
+    .photo-grid-2x2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-width: 95%;
+        max-height: 55vh;
+        width: 100%;
+    }
+
+    .grid-photo {
+        width: 100%;
+        height: 100%;
+        max-height: 26vh;
+        object-fit: cover;
+    }
+
+    .countdown-value {
+        font-size: 1.2rem;
+        min-width: 45px;
+        padding: 6px 5px;
+    }
+
+    .countdown-label {
+        font-size: 0.5rem;
+    }
+
+    .countdown-separator {
+        font-size: 1rem;
+    }
+
+    .win-title, .code-title {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .final-card-title {
+        font-size: 0.85rem;
+    }
+
+    .final-card-text {
+        font-size: 0.8rem;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .christmas-back {
+        top: 6px;
+        left: 6px;
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .christmas-collection {
+        padding: 15px 8px;
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .christmas-collection .cute-header {
+        margin-bottom: 10px;
+        flex-shrink: 0;
+    }
+
+    .christmas-collection .swipe-hint {
+        margin: 8px 0;
+        flex-shrink: 0;
+    }
+
+    .christmas-collection .swiper-container {
+        height: 550px;
+        max-width: 98%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+
+    .christmas-collection .card-wrapper {
+        height: 100%;
+    }
+
+    .christmas-collection .card {
+        padding: 12px;
+        height: 100%;
+        overflow-y: auto;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .christmas-collection .card-content {
+        gap: 15px;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .christmas-collection .card-image {
+        width: 300px;
+        height: 300px;
+        max-width: 95%;
+        max-height: 50vh;
+    }
+
+    .christmas-collection .card-video {
+        max-width: 95%;
+        max-height: 45vh;
+    }
+
+    .christmas-collection .card-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        padding: 10px;
+        margin-top: auto;
+    }
+
+    .christmas-game-title {
+        font-size: 0.9rem;
+    }
+
+    .christmas-title {
+        font-size: 0.9rem;
+        line-height: 1.2;
+        margin: 5px 0;
+    }
+
+    .christmas-collection .cast-text {
+        font-size: 0.65rem;
+    }
+
+    .christmas-collection .card-text {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        padding: 12px;
+    }
+
+    .card-image, .card-video {
+        max-width: 100%;
+        max-height: 300px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .image-container, .video-container {
+        max-height: 300px;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .cute-gif {
+        width: 60px;
+        height: 60px;
+        max-width: 60px;
+        max-height: 60px;
+    }
+
+    .countdown-value {
+        font-size: 1rem;
+        min-width: 40px;
+        padding: 5px 4px;
+    }
+
+    .countdown-label {
+        font-size: 0.45rem;
+    }
+
+    .countdown-separator {
+        font-size: 0.85rem;
+    }
+
+    .win-title, .code-title {
+        font-size: 0.8rem;
+        line-height: 1.3;
+    }
+
+    .final-card-title {
+        font-size: 0.75rem;
+    }
+
+    .final-card-text {
+        font-size: 0.7rem;
+    }
+
+    .photo-grid-2x2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-width: 95%;
+        width: 100%;
+    }
+
+    .grid-photo {
+        width: 100%;
+        height: 100%;
+        max-height: 150px;
+        object-fit: cover;
+    }
+}

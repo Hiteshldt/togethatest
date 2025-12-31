@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy 3rd month, love</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="christmas-styles.css">
     <style>
         @font-face {
             font-family: 'Beachday';
@@ -19,7 +20,7 @@
     <div id="lockScreen" class="lock-screen">
         <div class="lock-container">
             <div class="lock-icon">🔒</div>
-            <h2 class="lock-title">Enter PIN</h2>
+            <h2 class="lock-title">PIN Pls miss</h2>
             <div class="pin-input-container">
                 <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autofocus>
             </div>
@@ -28,10 +29,38 @@
         </div>
     </div>
 
-    <div class="container" id="mainContent" style="display: none;">
+    <!-- Gallery View -->
+    <div class="gallery-container" id="galleryView" style="display: none;">
         <header class="cute-header">
-            <h2 class="love-title">have your seat, get comfy</h2>
-            <p class="cast-text"> -> doiodoi and hitesh</p>
+            <h2 class="love-title">Choose a Memory</h2>
+            <p class="cast-text">doiodoi ❤️ hitesh</p>
+        </header>
+
+        <div class="gallery-grid">
+            <div class="gallery-card" onclick="openCardCollection('august')">
+                <div class="gallery-card-date">17-08-2025</div>
+                <div class="gallery-card-emoji">💕</div>
+            </div>
+
+            <div class="gallery-card christmas-card" onclick="openCardCollection('christmas')">
+                <div class="gallery-card-date">17-12-2025</div>
+                <div class="gallery-card-emoji">🎄</div>
+                <div class="snowflakes">
+                    <div class="snowflake">❄</div>
+                    <div class="snowflake">❅</div>
+                    <div class="snowflake">❆</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- August Collection -->
+    <div class="container card-collection" id="augustCollection" style="display: none;">
+        <button class="back-to-gallery" onclick="backToGallery()">←</button>
+
+        <header class="cute-header">
+            <h2 class="love-title">17-08-2025</h2>
+            <p class="cast-text">3 months together 💕</p>
         </header>
 
         <div class="swipe-hint">
@@ -43,7 +72,7 @@
         <div class="swiper-container">
             <div class="card-wrapper">
                 <!-- Card 1: Opening -->
-                <div class="card">
+                <div class="card active">
                     <div class="card-content">
                         <p class="card-text">ready miss?</p>
                         <div class="gif-decoration">
@@ -155,18 +184,6 @@
                 <button class="nav-btn prev-btn" onclick="previousCard()">
                     <span class="nav-icon">‹</span>
                 </button>
-                <div class="dots-container">
-                    <span class="dot active" onclick="currentCard(1)"></span>
-                    <span class="dot" onclick="currentCard(2)"></span>
-                    <span class="dot" onclick="currentCard(3)"></span>
-                    <span class="dot" onclick="currentCard(4)"></span>
-                    <span class="dot" onclick="currentCard(5)"></span>
-                    <span class="dot" onclick="currentCard(7)"></span>
-                    <span class="dot" onclick="currentCard(9)"></span>
-                    <span class="dot" onclick="currentCard(10)"></span>
-                    <span class="dot" onclick="currentCard(11)"></span>
-                    <span class="dot" onclick="currentCard(12)"></span>
-                </div>
                 <button class="nav-btn next-btn" onclick="nextCard()">
                     <span class="nav-icon">›</span>
                 </button>
@@ -174,11 +191,276 @@
         </div>
     </div>
 
-    <!-- Page navigation indicators -->
-    <div class="page-indicator left" id="prevIndicator">‹</div>
-    <div class="page-indicator right" id="nextIndicator">›</div>
+    <!-- Christmas Collection -->
+    <div class="container card-collection christmas-collection" id="christmasCollection" style="display: none;">
+        <button class="back-to-gallery christmas-back" onclick="backToGallery()">←</button>
 
-    <!-- Floating GIF decorations -->
+        <header class="cute-header">
+            <h2 class="love-title christmas-title">17-12-2025 🎄</h2>
+            <p class="cast-text">Merry Christmas, my love ❄️</p>
+        </header>
+
+        <div class="swipe-hint">
+            <div class="arrow-left">‹</div>
+            <span class="swipe-text">Swipe swipe</span>
+            <div class="arrow-right">›</div>
+        </div>
+
+        <div class="swiper-container">
+            <div class="card-wrapper christmas-cards">
+                <!-- Card 1: Merry Christmas Text -->
+                <div class="card christmas-themed active">
+                    <div class="card-content">
+                        <p class="card-text">Merry Christmas and happy new year 🎄✨</p>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="Christmas">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: AI Ghibli-style image (add ghibli-us.png to folder) -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="ghibli-us.png" alt="Us in Ghibli style" class="card-image">
+                        </div>
+                        <p class="card-text">us, but make it ghibli 💕</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Things we did recap intro -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <h2 class="christmas-game-title">Things we did? 🤔</h2>
+                        <p class="card-text">Wants a recap?</p>
+                        <button class="christmas-btn" onclick="nextCard()" style="margin-top: 20px;">Show me! →</button>
+                        <div class="gif-decoration">
+                            <img src="jiji-cat.gif" class="cute-gif" alt="Recap">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Same card -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="Things we did folder/Getting the same card.JPG" alt="Same card" class="card-image">
+                        </div>
+                        <p class="card-text">getting the same card? sign no?</p>
+                    </div>
+                </div>
+
+                <!-- Card 5: Dates -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="Things we did folder/goin out in dates.JPEG" alt="College dates" class="card-image">
+                        </div>
+                        <p class="card-text">goin out on dates? college dates</p>
+                    </div>
+                </div>
+
+                <!-- Card 6: Gifting -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="Things we did folder/Giftin_ Yes.JPG" alt="Gifting" class="card-image">
+                        </div>
+                        <p class="card-text">giftin?? yes</p>
+                    </div>
+                </div>
+
+                <!-- Card 7: Reel bro -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="video-container">
+                            <video controls loop preload="metadata" class="card-video">
+                                <source src="Things we did folder/Reelbro.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <p class="card-text">Reel bro</p>
+                    </div>
+                </div>
+
+                <!-- Card 8: Matched -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="Things we did folder/Matching_.jpg" alt="Matching" class="card-image">
+                        </div>
+                        <p class="card-text">Matched?</p>
+                    </div>
+                </div>
+
+                <!-- Card 9: Flowers -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="Things we did folder/Flowers.jpg" alt="Flowers" class="card-image">
+                        </div>
+                        <p class="card-text">Flowers yes, you are the only flower love</p>
+                    </div>
+                </div>
+
+                <!-- Card 10: Long distance -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">Longs distance lesgoo, but slept together he, everyday, almost, you made it easy love, the distance never mattered, yeah it did, a lil, but I grew stronger no, and i love you so much for that</p>
+                        <div class="gif-decoration">
+                            <img src="susuwatari-studio-ghibli.gif" class="cute-gif" alt="Long distance">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 11: Dehradhun -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <div class="video-container">
+                            <video controls loop preload="metadata" class="card-video">
+                                <source src="Things we did folder/Dehradhun.MP4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <p class="card-text">Hello Dehradhun?</p>
+                    </div>
+                </div>
+
+                <!-- Card 12: Went back -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">And then we went back</p>
+                        <div class="gif-decoration">
+                            <img src="jiji-cat.gif" class="cute-gif" alt="Back">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 13: New year promises -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">I might fumble things sum-times, or feel like am dumb, which i am honestly, but lets step in the new year with sum promises maybe? Even if things go a lil rough, will hold, will analyse and fix? i will try to be more active and love you more, even though you loved me more always, and with this, we can wrap up the year no miss??</p>
+                        <div class="gif-decoration">
+                            <img src="susuwatari-studio-ghibli.gif" class="cute-gif" alt="Promises">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 14: Something more -->
+                <div class="card christmas-themed">
+                    <div class="card-content">
+                        <p class="card-text">But wait, there is something more no?</p>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="More">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 15: Countdown Timer (last visible until countdown ends) -->
+                <div class="card christmas-themed timer-card" id="timerCard">
+                    <div class="card-content">
+                        <h2 class="christmas-game-title">Your surprise awaits! 🎁</h2>
+                        <p class="card-text">Something special unlocks in...</p>
+                        <div class="countdown-timer">
+                            <div class="timer-display" id="timerDisplay">Loading...</div>
+                        </div>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="Waiting">
+                        </div>
+                        <div class="code-error" id="codeError"></div>
+                    </div>
+                </div>
+
+                <!-- Card 13: Code Lock (shown after timer ends) -->
+                <div class="card christmas-themed code-lock-card hidden-card" id="codeLockCard">
+                    <div class="card-content">
+                        <h2 class="christmas-game-title">🔐 Enter the Secret Code</h2>
+                        <p class="card-text">A special code unlocks your Christmas surprise...</p>
+                        <div class="code-input-container">
+                            <input type="text" id="secretCodeInput" class="code-input" maxlength="10" placeholder="Enter code">
+                            <button class="unlock-btn christmas-btn" onclick="checkSecretCode()">Unlock 🎁</button>
+                        </div>
+                        <div class="code-error" id="codeError2"></div>
+                    </div>
+                </div>
+
+                <!-- Card 14: Surprise Video (locked until code) -->
+                <div class="card christmas-themed reveal-card locked-card" id="revealCard1">
+                    <div class="card-content">
+                        <div class="video-container">
+                            <video controls loop preload="metadata" class="card-video">
+                                <source src="video2.MP4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 15: Text Message (locked until code) -->
+                <div class="card christmas-themed reveal-card locked-card" id="revealCard2">
+                    <div class="card-content">
+                        <p class="card-text reveal-text">This Christmas, and every moment with you, is a gift I treasure. Thank you for being my everything. 💕🎄</p>
+                        <div class="gif-decoration">
+                            <img src="21d14b1b1d143a2a26d20870d6eea7e8.gif" class="cute-gif" alt="Love">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 16: Image (locked until code) -->
+                <div class="card christmas-themed reveal-card locked-card" id="revealCard3">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="1.PNG" alt="Special memory" class="card-image">
+                        </div>
+                        <div class="gif-decoration">
+                            <img src="jiji-cat.gif" class="cute-gif" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 17: Final Text + Image (locked until code) -->
+                <div class="card christmas-themed reveal-card locked-card" id="revealCard4">
+                    <div class="card-content">
+                        <div class="image-container">
+                            <img src="2.JPG" alt="Forever together" class="card-image">
+                        </div>
+                        <p class="card-text final-letter">
+                            My dearest love,<br><br>
+                            This Christmas marks another beautiful chapter in our story. Thank you for every smile, every laugh, every quiet moment. You are my home, my adventure, my everything.<br><br>
+                            Forever yours ❤️
+                        </p>
+                        <div class="gif-decoration">
+                            <img src="totoro.gif" class="cute-gif" alt="Forever">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation christmas-nav">
+                <button class="nav-btn prev-btn" onclick="previousCard()">
+                    <span class="nav-icon">‹</span>
+                </button>
+                <button class="nav-btn next-btn" onclick="nextCard()">
+                    <span class="nav-icon">›</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Christmas Snowflakes -->
+        <div class="christmas-snowflakes">
+            <div class="snow">❅</div>
+            <div class="snow">❆</div>
+            <div class="snow">❄</div>
+            <div class="snow">❅</div>
+            <div class="snow">❆</div>
+            <div class="snow">❄</div>
+            <div class="snow">❅</div>
+            <div class="snow">❆</div>
+        </div>
+    </div>
+
+    <!-- Floating GIF decorations (shown in August collection) -->
     <div class="floating-gifs">
         <img src="totoro.gif" class="floating-gif gif1" alt="">
         <img src="jiji-cat.gif" class="floating-gif gif2" alt="">
@@ -203,8 +485,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Christmas Santa Game Modal -->
+    <div id="christmasGameModal" class="game-modal christmas-game-modal">
+        <div class="game-container christmas-game-container">
+            <div class="game-header">
+                <h3>Santa Runner! 🎅🎄</h3>
+                <button class="close-game" onclick="closeChristmasGame()">×</button>
+            </div>
+            <canvas id="christmasGameCanvas" width="400" height="600"></canvas>
+            <div class="game-ui">
+                <div class="experience">Score: <span id="christmasScore">0</span></div>
+                <div class="game-message" id="christmasGameMessage">Swipe up to jump! Avoid obstacles!</div>
+            </div>
+        </div>
+    </div>
     </div>
 
+    <!-- Image Lightbox Modal -->
+    <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close" onclick="closeLightbox()">×</span>
+        <img id="lightboxImage" src="" alt="Expanded image">
+    </div>
+
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

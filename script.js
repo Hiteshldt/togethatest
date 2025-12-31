@@ -8,13 +8,10 @@ function checkPin() {
 
     if (pin === '2266') {
         lockScreen.style.display = 'none';
-        mainContent.style.display = 'block';
-        // Initialize the swiper after unlocking
-        setTimeout(() => {
-            console.log('Initializing swiper...');
-            window.cardSwiper = new CuteCardSwiper();
-            console.log('Swiper initialized:', window.cardSwiper);
-        }, 200);
+        const galleryView = document.getElementById('galleryView');
+        if (galleryView) {
+            galleryView.style.display = 'flex';
+        }
     } else {
         errorMessage.textContent = 'Incorrect PIN. Try again.';
         pinInput.value = '';
@@ -24,6 +21,320 @@ function checkPin() {
             errorMessage.textContent = '';
         }, 2000);
     }
+}
+
+// Gallery Navigation Functions
+function openCardCollection(type) {
+    const galleryView = document.getElementById('galleryView');
+    galleryView.style.display = 'none';
+
+    if (type === 'august') {
+        const augustCollection = document.getElementById('augustCollection');
+        augustCollection.style.display = 'block';
+        setTimeout(() => {
+            window.cardSwiper = new CuteCardSwiper();
+        }, 200);
+    } else if (type === 'christmas') {
+        const christmasCollection = document.getElementById('christmasCollection');
+        christmasCollection.style.display = 'block';
+
+        setTimeout(() => {
+            window.cardSwiper = new CuteCardSwiper();
+
+            // Force first card to be visible
+            setTimeout(() => {
+                const firstCard = document.querySelector('.christmas-collection .card.active');
+                if (firstCard) {
+                    firstCard.style.display = 'flex';
+                    firstCard.style.visibility = 'visible';
+                    firstCard.style.opacity = '1';
+                    firstCard.style.zIndex = '100';
+                }
+            }, 100);
+
+            // Start countdown timer automatically
+            setTimeout(() => {
+                startCountdownTimer();
+            }, 500);
+        }, 200);
+    }
+}
+
+function backToGallery() {
+    const augustCollection = document.getElementById('augustCollection');
+    const christmasCollection = document.getElementById('christmasCollection');
+    const galleryView = document.getElementById('galleryView');
+
+    augustCollection.style.display = 'none';
+    christmasCollection.style.display = 'none';
+    galleryView.style.display = 'flex';
+
+    // Destroy current swiper
+    if (window.cardSwiper) {
+        window.cardSwiper = null;
+    }
+}
+
+// Christmas Game Functions
+function openChristmasGame() {
+    const modal = document.getElementById('christmasGameModal');
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+    initChristmasGame();
+}
+
+function closeChristmasGame() {
+    const modal = document.getElementById('christmasGameModal');
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    if (window.christmasGame) {
+        window.christmasGame.stop();
+        window.christmasGame = null;
+    }
+}
+
+// Initialize global state variables
+window.timerFinished = false;
+window.codeUnlocked = false;
+window.countdownInterval = null;
+
+// Show Timer Card - navigates to the timer card
+function showTimerCard() {
+    const timerCard = document.getElementById('timerCard');
+    const codeLockCard = document.getElementById('codeLockCard');
+
+    // Show the timer card (remove hidden-card class)
+    if (timerCard) {
+        timerCard.classList.remove('hidden-card');
+    }
+
+    // Navigate to timer card using the swiper
+    if (window.cardSwiper) {
+        // Find the timer card index
+        const visibleCollection = document.querySelector('.card-collection[style*="display: flex"]') ||
+                                  document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+        if (visibleCollection) {
+            const allCards = visibleCollection.querySelectorAll('.card');
+            const cards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card') || card === timerCard);
+
+            // Update total cards count
+            window.cardSwiper.totalCards = cards.length;
+
+            // Find timer card position and navigate
+            const timerIndex = cards.findIndex(card => card.id === 'timerCard');
+            if (timerIndex !== -1) {
+                window.cardSwiper.isTransitioning = false;
+                window.cardSwiper.goToCard(timerIndex + 1);
+            }
+        }
+    }
+
+    // Start the countdown timer
+    startCountdownTimer();
+}
+
+// Start Countdown Timer
+function startCountdownTimer() {
+    const timerDisplay = document.getElementById('timerDisplay');
+    if (!timerDisplay) return;
+
+    // Check if countdown is disabled
+    if (!GAME_CONFIG.COUNTDOWN_ENABLED) {
+        // Countdown disabled - skip directly to unlocked state
+        window.timerFinished = true;
+        timerDisplay.innerHTML = '🎉 Surprise Ready! 🎉';
+        timerDisplay.classList.add('timer-complete');
+
+        // Show the code lock card immediately
+        const codeLockCard = document.getElementById('codeLockCard');
+        if (codeLockCard) {
+            codeLockCard.classList.remove('hidden-card');
+        }
+        return;
+    }
+
+    // Get target date from config
+    const targetDate = new Date(GAME_CONFIG.COUNTDOWN_DATE).getTime();
+
+    // Clear any existing interval
+    if (window.countdownInterval) {
+        clearInterval(window.countdownInterval);
+    }
+
+    function updateTimer() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+            // Timer finished!
+            window.timerFinished = true;
+            timerDisplay.innerHTML = '🎉 Time\'s up! 🎉';
+            timerDisplay.classList.add('timer-complete');
+
+            // Show the code lock card
+            const codeLockCard = document.getElementById('codeLockCard');
+            if (codeLockCard) {
+                codeLockCard.classList.remove('hidden-card');
+            }
+
+            clearInterval(window.countdownInterval);
+            return;
+        }
+
+        // Calculate time units
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the countdown
+        timerDisplay.innerHTML = `
+            <div class="countdown-units">
+                <div class="countdown-unit"><span class="countdown-number">${days}</span><span class="countdown-label">days</span></div>
+                <div class="countdown-unit"><span class="countdown-number">${hours}</span><span class="countdown-label">hrs</span></div>
+                <div class="countdown-unit"><span class="countdown-number">${minutes}</span><span class="countdown-label">min</span></div>
+                <div class="countdown-unit"><span class="countdown-number">${seconds}</span><span class="countdown-label">sec</span></div>
+            </div>
+        `;
+    }
+
+    // Update immediately and then every second
+    updateTimer();
+    window.countdownInterval = setInterval(updateTimer, 1000);
+}
+
+// Check Secret Code
+function checkSecretCode() {
+    const codeInput = document.getElementById('secretCodeInput');
+    const codeError = document.getElementById('codeError');
+
+    if (!codeInput || !codeError) return;
+
+    const enteredCode = codeInput.value.trim().toUpperCase();
+    const correctCode = GAME_CONFIG.SECRET_CODE.toUpperCase();
+
+    if (enteredCode === correctCode) {
+        // Code is correct!
+        window.codeUnlocked = true;
+        codeError.textContent = '🎉 Code correct! Cards unlocked!';
+        codeError.style.color = '#90EE90';
+
+        // Unlock all reveal cards
+        const revealCards = document.querySelectorAll('.reveal-card.locked-card');
+        revealCards.forEach(card => {
+            card.classList.remove('locked-card');
+        });
+
+        // Update total cards count
+        if (window.cardSwiper) {
+            const visibleCollection = document.querySelector('.card-collection[style*="display: flex"]') ||
+                                      document.querySelector('.card-collection[style*="display: block"]') ||
+                                      document.querySelector('.card-collection:not([style*="display: none"])');
+            if (visibleCollection) {
+                const cards = Array.from(visibleCollection.querySelectorAll('.card')).filter(
+                    card => !card.classList.contains('hidden-card')
+                );
+                window.cardSwiper.totalCards = cards.length;
+            }
+        }
+
+        // Clear success message after delay
+        setTimeout(() => {
+            codeError.textContent = '';
+        }, 3000);
+    } else {
+        // Wrong code
+        codeError.textContent = GAME_CONFIG.WRONG_CODE_MESSAGE;
+        codeError.style.color = '#ff8a8a';
+        codeInput.value = '';
+        codeInput.classList.add('shake');
+
+        setTimeout(() => {
+            codeInput.classList.remove('shake');
+            codeError.textContent = '';
+        }, 2000);
+    }
+}
+
+// Initialize Christmas Game (placeholder - simple animation)
+function initChristmasGame() {
+    const canvas = document.getElementById('christmasGameCanvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = 400;
+    canvas.height = 500;
+
+    // Simple snowfall animation as placeholder
+    const snowflakes = [];
+    for (let i = 0; i < 50; i++) {
+        snowflakes.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 3 + 1,
+            speed: Math.random() * 2 + 1
+        });
+    }
+
+    let animationId = null;
+
+    function animate() {
+        ctx.fillStyle = '#1a3a1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw snowflakes
+        ctx.fillStyle = '#fff';
+        snowflakes.forEach(flake => {
+            ctx.beginPath();
+            ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            flake.y += flake.speed;
+            if (flake.y > canvas.height) {
+                flake.y = 0;
+                flake.x = Math.random() * canvas.width;
+            }
+        });
+
+        // Draw tree
+        ctx.fillStyle = '#2d5a2d';
+        ctx.beginPath();
+        ctx.moveTo(200, 100);
+        ctx.lineTo(100, 350);
+        ctx.lineTo(300, 350);
+        ctx.closePath();
+        ctx.fill();
+
+        // Draw star
+        ctx.fillStyle = '#ffd700';
+        ctx.font = '30px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('⭐', 200, 90);
+
+        // Draw message
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px "Press Start 2P"';
+        ctx.fillText('Merry Christmas!', 200, 420);
+        ctx.font = '12px "Press Start 2P"';
+        ctx.fillText('Click anywhere to close', 200, 460);
+
+        animationId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Store for cleanup
+    window.christmasGame = {
+        stop: function() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        }
+    };
+
+    // Close on click
+    canvas.onclick = closeChristmasGame;
 }
 
 // Allow Enter key to submit PIN
@@ -36,29 +347,78 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Add click-to-zoom for all card images
+    setupImageLightbox();
+});
+
+// Image Lightbox/Zoom functionality
+function setupImageLightbox() {
+    // Add click listeners to all card images
+    document.querySelectorAll('.card-image').forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openLightbox(this.src);
+        });
+    });
+}
+
+function openLightbox(imageSrc) {
+    const lightbox = document.getElementById('imageLightbox');
+    const lightboxImg = document.getElementById('lightboxImage');
+
+    if (lightbox && lightboxImg) {
+        lightboxImg.src = imageSrc;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('imageLightbox');
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Close lightbox with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    }
 });
 
 // Anniversary Card Swiper
 class CuteCardSwiper {
     constructor() {
         this.currentCard = 1;
-        this.totalCards = 12;
+        this.totalCards = 12; // Will be updated dynamically
         this.isTransitioning = false;
         this.touchStartX = 0;
         this.touchEndX = 0;
         this.minSwipeDistance = 50;
-        
+
         this.init();
     }
-    
+
     init() {
-        console.log('Swiper init() called');
-        const cards = document.querySelectorAll('.card');
-        console.log(`Found ${cards.length} cards`);
+        // Dynamically count cards in the currently visible collection (excluding hidden-card class)
+        const visibleCollection = document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+
+        if (visibleCollection) {
+            const allCards = visibleCollection.querySelectorAll('.card');
+            const visibleCards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card'));
+            this.totalCards = visibleCards.length;
+        } else {
+            const allCards = document.querySelectorAll('.card');
+            const visibleCards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card'));
+            this.totalCards = visibleCards.length;
+        }
 
         this.bindEvents();
         this.updateCardPositions();
-        this.updateDots();
         this.preloadImages();
 
         // Ensure first card is visible
@@ -68,29 +428,43 @@ class CuteCardSwiper {
     }
     
     bindEvents() {
+        // Find the visible collection
+        const visibleCollection = document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+
+        if (!visibleCollection) {
+            return;
+        }
+
         // Touch events for swipe functionality
-        const cardWrapper = document.querySelector('.card-wrapper');
-        cardWrapper.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
-        cardWrapper.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
-        
-        // Mouse events for desktop dragging
-        cardWrapper.addEventListener('mousedown', this.handleMouseDown.bind(this));
-        cardWrapper.addEventListener('mouseup', this.handleMouseUp.bind(this));
-        
+        const cardWrapper = visibleCollection.querySelector('.card-wrapper');
+        if (cardWrapper) {
+            cardWrapper.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+            cardWrapper.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
+
+            // Mouse events for desktop dragging
+            cardWrapper.addEventListener('mousedown', this.handleMouseDown.bind(this));
+            cardWrapper.addEventListener('mouseup', this.handleMouseUp.bind(this));
+
+            // Prevent context menu on long touch
+            cardWrapper.addEventListener('contextmenu', (e) => e.preventDefault());
+        }
+
         // Keyboard navigation
         document.addEventListener('keydown', this.handleKeyPress.bind(this));
-        
-        // Navigation buttons
-        document.querySelector('.prev-btn').addEventListener('click', () => this.previousCard());
-        document.querySelector('.next-btn').addEventListener('click', () => this.nextCard());
-        
-        // Dot navigation
-        document.querySelectorAll('.dot').forEach((dot, index) => {
+
+        // Navigation buttons in the visible collection
+        const prevBtn = visibleCollection.querySelector('.prev-btn');
+        const nextBtn = visibleCollection.querySelector('.next-btn');
+
+        if (prevBtn) prevBtn.addEventListener('click', () => this.previousCard());
+        if (nextBtn) nextBtn.addEventListener('click', () => this.nextCard());
+
+        // Dot navigation in the visible collection
+        const dots = visibleCollection.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
             dot.addEventListener('click', () => this.goToCard(index + 1));
         });
-        
-        // Prevent context menu on long touch
-        cardWrapper.addEventListener('contextmenu', (e) => e.preventDefault());
     }
     
     handleTouchStart(e) {
@@ -131,11 +505,11 @@ class CuteCardSwiper {
     
     handleSwipe() {
         const swipeDistance = this.touchStartX - this.touchEndX;
-        
+
         if (Math.abs(swipeDistance) < this.minSwipeDistance) {
             return;
         }
-        
+
         if (swipeDistance > 0) {
             // Swipe left - next card
             this.nextCard();
@@ -144,10 +518,10 @@ class CuteCardSwiper {
             this.previousCard();
         }
     }
-    
+
     handleKeyPress(e) {
         if (this.isTransitioning) return;
-        
+
         switch(e.key) {
             case 'ArrowLeft':
                 e.preventDefault();
@@ -173,8 +547,47 @@ class CuteCardSwiper {
     }
     
     nextCard() {
-        console.log('nextCard() called, current:', this.currentCard, 'transitioning:', this.isTransitioning);
         if (this.isTransitioning) return;
+
+        // Check if we're on timer card and timer hasn't finished
+        const visibleCollection = document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+
+        if (visibleCollection) {
+            const allCards = visibleCollection.querySelectorAll('.card');
+            const cards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card'));
+            const currentCardElement = cards[this.currentCard - 1];
+
+            // Block if on timer card and timer not finished
+            if (currentCardElement && currentCardElement.classList.contains('timer-card')) {
+                if (!window.timerFinished) {
+                    const codeError = document.getElementById('codeError');
+                    if (codeError) {
+                        codeError.textContent = 'Please wait for the timer to finish ⏳';
+                        codeError.style.color = '#ff8a8a';
+                        setTimeout(() => {
+                            codeError.textContent = '';
+                        }, 2000);
+                    }
+                    return;
+                }
+            }
+
+            // Block if on code lock card and code not entered
+            if (currentCardElement && currentCardElement.classList.contains('code-lock-card')) {
+                if (!window.codeUnlocked) {
+                    const codeError = document.getElementById('codeError');
+                    if (codeError) {
+                        codeError.textContent = 'Please enter the correct code first 🔐';
+                        codeError.style.color = '#ff8a8a';
+                        setTimeout(() => {
+                            codeError.textContent = '';
+                        }, 2000);
+                    }
+                    return;
+                }
+            }
+        }
 
         this.hideSwipeHint();
         this.pulsePageIndicator('next');
@@ -188,7 +601,6 @@ class CuteCardSwiper {
     }
 
     previousCard() {
-        console.log('previousCard() called, current:', this.currentCard, 'transitioning:', this.isTransitioning);
         if (this.isTransitioning) return;
 
         this.hideSwipeHint();
@@ -203,26 +615,59 @@ class CuteCardSwiper {
     }
     
     goToCard(cardNumber) {
-        console.log('goToCard() called with:', cardNumber, 'current:', this.currentCard, 'transitioning:', this.isTransitioning);
         if (this.isTransitioning || cardNumber === this.currentCard) {
-            console.log('goToCard blocked - transitioning or same card');
             return;
+        }
+
+        // Check if target card is locked
+        const visibleCollection = document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+
+        if (visibleCollection) {
+            const allCards = visibleCollection.querySelectorAll('.card');
+            const cards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card'));
+            const targetCard = cards[cardNumber - 1];
+
+            if (targetCard && targetCard.classList.contains('locked-card')) {
+                // Show error message if code lock card exists
+                const codeError = document.getElementById('codeError');
+                if (codeError) {
+                    codeError.textContent = 'Please enter the correct code first 🔐';
+                    codeError.style.color = '#ff8a8a';
+                    setTimeout(() => {
+                        codeError.textContent = '';
+                    }, 2000);
+                }
+                return;
+            }
         }
 
         this.hideSwipeHint();
         this.isTransitioning = true;
         this.currentCard = cardNumber;
-        console.log('Moving to card:', cardNumber);
 
         this.updateCardPositions();
-        this.updateDots();
         this.addCuteEffects();
 
-        // Reset transition lock after animation completes
+        // Check if we landed on timer card and start countdown
+        if (visibleCollection) {
+            const cards = visibleCollection.querySelectorAll('.card');
+            const currentCardElement = cards[cardNumber - 1];
+
+            if (currentCardElement && currentCardElement.classList.contains('timer-card')) {
+                // Start countdown timer after a short delay
+                setTimeout(() => {
+                    if (typeof startCountdownTimer === 'function') {
+                        startCountdownTimer();
+                    }
+                }, 800);
+            }
+        }
+
+        // Reset transition lock after animation completes (matched to CSS transition time)
         setTimeout(() => {
             this.isTransitioning = false;
-            console.log('Transition complete');
-        }, 600);
+        }, 700);
     }
     
     hideSwipeHint() {
@@ -237,11 +682,20 @@ class CuteCardSwiper {
     }
     
     updateCardPositions() {
-        const cards = document.querySelectorAll('.card');
-        console.log(`Updating card positions. Current card: ${this.currentCard}, Total cards found: ${cards.length}`);
+        // Only target cards in the currently visible collection
+        const visibleCollection = document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+
+        if (!visibleCollection) {
+            return;
+        }
+
+        // Get all cards and filter out hidden-card class
+        const allCards = visibleCollection.querySelectorAll('.card');
+        const cards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card'));
+
 
         if (cards.length === 0) {
-            console.error('No cards found!');
             return;
         }
 
@@ -249,36 +703,41 @@ class CuteCardSwiper {
             const cardNumber = index + 1;
             card.classList.remove('active', 'prev', 'next');
 
+            // Remove any inline styles that might override CSS
+            card.style.visibility = '';
+            card.style.opacity = '';
+            card.style.zIndex = '';
+
             if (cardNumber === this.currentCard) {
                 card.classList.add('active');
-                console.log(`Card ${cardNumber} set as active`, card);
-                // Force display for debugging
-                card.style.visibility = 'visible';
-                card.style.opacity = '1';
-                card.style.zIndex = '10';
+                // Reset scroll position for active card
+                card.scrollTop = 0;
             } else if (cardNumber < this.currentCard) {
                 card.classList.add('prev');
-                card.style.visibility = 'hidden';
             } else {
                 card.classList.add('next');
-                card.style.visibility = 'hidden';
             }
         });
 
         // Log the active card content for debugging
-        const activeCard = document.querySelector('.card.active');
+        const activeCard = visibleCollection.querySelector('.card.active');
         if (activeCard) {
-            console.log('Active card content:', activeCard.textContent.substring(0, 50));
         } else {
-            console.error('No active card found after update!');
         }
     }
-    
-    updateDots() {
-        const dots = document.querySelectorAll('.dot');
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index + 1 === this.currentCard);
-        });
+
+    updateCardDisplay() {
+        // Recount cards (excluding hidden-card class) and update display
+        const visibleCollection = document.querySelector('.card-collection[style*="display: block"]') ||
+                                  document.querySelector('.card-collection:not([style*="display: none"])');
+
+        if (visibleCollection) {
+            const allCards = visibleCollection.querySelectorAll('.card');
+            const visibleCards = Array.from(allCards).filter(card => !card.classList.contains('hidden-card'));
+            this.totalCards = visibleCards.length;
+        }
+
+        this.updateCardPositions();
     }
     
     addCuteEffects() {
@@ -305,7 +764,6 @@ class CuteCardSwiper {
                 }, 500);
             }
         } catch (error) {
-            console.log('Error pulsing indicator:', error);
         }
     }
     
@@ -348,29 +806,23 @@ class CuteCardSwiper {
 
 // Global functions for inline event handlers
 function nextCard() {
-    console.log('Global nextCard() called, swiper exists:', !!window.cardSwiper);
     if (window.cardSwiper) {
         window.cardSwiper.nextCard();
     } else {
-        console.error('Swiper not initialized!');
     }
 }
 
 function previousCard() {
-    console.log('Global previousCard() called, swiper exists:', !!window.cardSwiper);
     if (window.cardSwiper) {
         window.cardSwiper.previousCard();
     } else {
-        console.error('Swiper not initialized!');
     }
 }
 
 function currentCard(cardNumber) {
-    console.log('Global currentCard() called with:', cardNumber, 'swiper exists:', !!window.cardSwiper);
     if (window.cardSwiper) {
         window.cardSwiper.goToCard(cardNumber);
     } else {
-        console.error('Swiper not initialized!');
     }
 }
 
@@ -434,7 +886,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstCard = document.querySelector('.card:first-child');
         if (firstCard && !firstCard.classList.contains('active')) {
             firstCard.classList.add('active');
-            console.log('First card made active as fallback');
         }
     }, 100);
     
@@ -470,7 +921,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add click event to ensure video plays with sound
         video.addEventListener('click', function() {
             if (this.paused) {
-                this.play().catch(console.error);
             } else {
                 this.pause();
             }
@@ -484,19 +934,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add cute welcome message
     setTimeout(() => {
-        console.log('💕 Welcome to your cute anniversary website! 💕');
-        console.log('✨ Swipe, click, or use arrow keys to navigate ✨');
     }, 1000);
 });
 
 // Add service worker registration for offline capability (optional enhancement)
-if ('serviceWorker' in navigator) {
+// Only works on http/https, not file:// protocol
+if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
     window.addEventListener('load', () => {
         // Only register service worker if the file exists
         fetch('/sw.js', { method: 'HEAD' })
             .then(() => {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(() => console.log('🌟 Offline support enabled'))
                     .catch(() => {});
             })
             .catch(() => {});
@@ -550,14 +998,18 @@ function closeGame() {
     }
 }
 
-// Super Easy Glitch-Free Flappy Bird Game
+// Super Easy Glitch-Free Flappy Bird Game - PIXEL STYLE
 class LoveBirdGame {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         if (!this.canvas) return;
-        
+
         this.ctx = this.canvas.getContext('2d');
         if (!this.ctx) return;
+
+        // Enable pixel art rendering
+        this.ctx.imageSmoothingEnabled = false;
+        this.canvas.style.imageRendering = 'pixelated';
         
         // Game state
         this.isDestroyed = false;
@@ -865,77 +1317,134 @@ class LoveBirdGame {
 
     render() {
         if (this.isDestroyed || !this.ctx) return;
-        
+
         try {
-            // Clear canvas with sky gradient
-            const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-            gradient.addColorStop(0, '#e6f3ff');
-            gradient.addColorStop(1, '#f0f8ff');
-            this.ctx.fillStyle = gradient;
+            // Pixel art brown background to match theme
+            this.ctx.fillStyle = '#3d2410';
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            // Draw pipes first (behind bird)
-            this.ctx.fillStyle = '#c19a6b';
-            this.ctx.strokeStyle = '#8b7355';
-            this.ctx.lineWidth = 2;
-            
+            // Add pixel stars/dots (simple rectangles)
+            this.ctx.fillStyle = '#ffd700';
+            const starPositions = [
+                {x: 50, y: 40}, {x: 150, y: 80}, {x: 280, y: 50},
+                {x: 120, y: 350}, {x: 220, y: 380}, {x: 320, y: 100},
+                {x: 80, y: 200}, {x: 250, y: 250}
+            ];
+            starPositions.forEach(star => {
+                this.ctx.fillRect(star.x, star.y, 4, 4);
+                this.ctx.fillRect(star.x + 8, star.y + 12, 4, 4);
+            });
+
+            // Draw pipes in pixel style - gold/brown theme
             for (const pipe of this.pipes) {
                 if (!pipe) continue;
-                
+
+                // Main pipe body - dark gold
+                this.ctx.fillStyle = '#b8860b';
+
                 // Top pipe
-                this.ctx.fillRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
-                this.ctx.strokeRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
-                
+                this.ctx.fillRect(Math.floor(pipe.x), 0, this.pipeWidth, Math.floor(pipe.topHeight));
+
+                // Top pipe cap (slightly wider) - bright gold
+                this.ctx.fillStyle = '#ffd700';
+                this.ctx.fillRect(Math.floor(pipe.x - 4), Math.floor(pipe.topHeight - 16), this.pipeWidth + 8, 16);
+
                 // Bottom pipe
-                this.ctx.fillRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
-                this.ctx.strokeRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
+                this.ctx.fillStyle = '#b8860b';
+                this.ctx.fillRect(Math.floor(pipe.x), Math.floor(pipe.bottomY), this.pipeWidth, this.canvas.height - Math.floor(pipe.bottomY));
+
+                // Bottom pipe cap
+                this.ctx.fillStyle = '#ffd700';
+                this.ctx.fillRect(Math.floor(pipe.x - 4), Math.floor(pipe.bottomY), this.pipeWidth + 8, 16);
+
+                // Pixel border - dark outline
+                this.ctx.strokeStyle = '#1a0f05';
+                this.ctx.lineWidth = 3;
+                this.ctx.strokeRect(Math.floor(pipe.x), 0, this.pipeWidth, Math.floor(pipe.topHeight));
+                this.ctx.strokeRect(Math.floor(pipe.x), Math.floor(pipe.bottomY), this.pipeWidth, this.canvas.height - Math.floor(pipe.bottomY));
             }
 
-            // Draw bird
+            // Draw bird in pixel style
+            const birdX = Math.floor(this.bird.x);
+            const birdY = Math.floor(this.bird.y);
+
             if (this.birdImgLoaded && this.birdImg.complete) {
                 this.ctx.save();
-                this.ctx.translate(this.bird.x + this.bird.size/2, this.bird.y + this.bird.size/2);
-                
-                // Subtle rotation based on velocity
-                const rotation = Math.min(Math.max(this.bird.velocity * 0.05, -0.3), 0.3);
-                this.ctx.rotate(rotation);
-                
-                // Draw bird image with circular clipping
-                this.ctx.beginPath();
-                this.ctx.arc(0, 0, this.bird.size/2, 0, Math.PI * 2);
-                this.ctx.clip();
-                
-                // Draw the actual bird image
+
+                // No rotation - keep it pixel perfect
+                this.ctx.imageSmoothingEnabled = false;
+
+                // Draw the bird image as a square (no circular clipping for pixel art)
                 this.ctx.drawImage(
-                    this.birdImg, 
-                    -this.bird.size/2, 
-                    -this.bird.size/2, 
-                    this.bird.size, 
+                    this.birdImg,
+                    birdX,
+                    birdY,
+                    this.bird.size,
                     this.bird.size
                 );
-                
+
                 this.ctx.restore();
             } else {
-                // Fallback circle
-                this.ctx.fillStyle = '#ff69b4';
-                this.ctx.beginPath();
-                this.ctx.arc(
-                    this.bird.x + this.bird.size/2, 
-                    this.bird.y + this.bird.size/2, 
-                    this.bird.size/2, 
-                    0, 
-                    Math.PI * 2
-                );
-                this.ctx.fill();
+                // Fallback pixel bird - bright gold
+                this.ctx.fillStyle = '#ffd700';
+                this.ctx.fillRect(birdX, birdY, this.bird.size, this.bird.size);
+
+                // Eye
+                this.ctx.fillStyle = '#1a0f05';
+                this.ctx.fillRect(birdX + this.bird.size - 8, birdY + 6, 4, 4);
+
+                // Wing
+                this.ctx.fillStyle = '#ffe066';
+                this.ctx.fillRect(birdX + 4, birdY + this.bird.size/2, 8, 6);
+
+                // Pixel border
+                this.ctx.strokeStyle = '#1a0f05';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(birdX, birdY, this.bird.size, this.bird.size);
             }
 
-            // Draw only score
-            this.ctx.fillStyle = '#8b7355';
-            this.ctx.font = 'bold 20px Arial';
+            // Pixel art ground - darker brown
+            this.ctx.fillStyle = '#2a1a0a';
+            this.ctx.fillRect(0, this.canvas.height - 24, this.canvas.width, 24);
+
+            // Ground pattern - gold highlights
+            this.ctx.fillStyle = '#ffd700';
+            for (let i = 0; i < this.canvas.width; i += 16) {
+                this.ctx.fillRect(i, this.canvas.height - 24, 4, 4);
+                this.ctx.fillRect(i + 8, this.canvas.height - 16, 4, 4);
+            }
+
+            // Top border line
+            this.ctx.fillStyle = '#ffd700';
+            this.ctx.fillRect(0, this.canvas.height - 24, this.canvas.width, 2);
+
+            // Scanline effect for retro look
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+            for (let y = 0; y < this.canvas.height; y += 4) {
+                this.ctx.fillRect(0, y, this.canvas.width, 2);
+            }
+
+            // Draw score in pixel font style - gold
+            this.ctx.fillStyle = '#ffd700';
+            this.ctx.strokeStyle = '#1a0f05';
+            this.ctx.lineWidth = 4;
+            this.ctx.font = 'bold 24px "Press Start 2P", monospace';
             this.ctx.textAlign = 'left';
-            this.ctx.fillText(`Score: ${this.score}`, 15, 30);
+            this.ctx.strokeText(`${this.score}`, 15, 35);
+            this.ctx.fillText(`${this.score}`, 15, 35);
+
+            // Draw start message if not started
+            if (!this.gameStarted) {
+                this.ctx.fillStyle = '#ffd700';
+                this.ctx.strokeStyle = '#1a0f05';
+                this.ctx.lineWidth = 5;
+                this.ctx.font = 'bold 14px "Press Start 2P", monospace';
+                this.ctx.textAlign = 'center';
+                const msg = 'TAP TO START';
+                this.ctx.strokeText(msg, this.canvas.width/2, this.canvas.height/2);
+                this.ctx.fillText(msg, this.canvas.width/2, this.canvas.height/2);
+            }
         } catch (error) {
-            console.warn('Render error:', error);
         }
     }
 
