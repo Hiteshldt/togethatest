@@ -16,7 +16,7 @@ const GAME_CONFIG = {
     // Countdown timer - Set your target date here
     // Format: 'YYYY-MM-DD HH:MM:SS' (24-hour format)
     // Example: '2026-01-03 00:00:00' for January 3rd, 2026 at midnight
-    COUNTDOWN_DATE: '2026-01-08 00:00:00',
+    COUNTDOWN_DATE: '2026-01-20 00:00:00',
 
     // ═══════════════════════════════════════════════════════
     // SECRET CODE SETTINGS
